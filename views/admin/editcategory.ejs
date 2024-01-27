@@ -1,0 +1,51 @@
+<%- include('../layout/admin/header.ejs') %>
+<div class="col-md-12"  style="  display: block; 
+margin: auto;  
+width: 50%;    
+position: relative; 
+top: 50%;
+transform: translateY(-50%);">
+    <form  action="#" method="post">
+       
+        <div class="mb-4">
+          
+            <label for="name"   class="form-label">Name</label>
+            <input type="text" name="name" placeholder="<%=userdata.name %>" class="form-control" id="name" />
+            <p id="nameError" style="color: red"></p>
+        </div>
+       
+       
+        <div class="mb-4">
+            <label for="Description" class="form-label">Description</label>
+            <textarea placeholder="<%=userdata.description%>" name="Description" id="Description" class="form-control"></textarea>
+            <p id="DescriptionError" style="color: red"></p>
+            <input type="hidden" name="id" value="<%=userdata._id%>">
+        </div>
+        <div class="d-grid">
+            <button type="submit"  onclick="return validateForm()"  class="btn btn-primary">Update category</button>
+           
+        </div>
+    </form>
+</div>
+<script>
+function validateForm(){
+    var name=document.getElementById('name').value
+    var Description=document.getElementById('Description').value
+    if (!/^[a-zA-Z]+$/.test(name) || name.trim() === ""){
+        document.getElementById("nameError").innerText="plaes enter valid number (letter only)"
+        return false
+    }else{
+        document.getElementById("nameError").innerText=""
+    }
+    if (Description.trim() === "") {
+            document.getElementById("DescriptionError").innerText="pleas eneter discription"
+            return false;
+        }else{
+            document.getElementById("DescriptionError").innerText=""
+        }
+        return true
+}
+
+</script>
+
+<%- include('../layout/admin/footer.ejs') %>

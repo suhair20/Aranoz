@@ -1,0 +1,111 @@
+
+
+<%- include('../layout/admin/header.ejs') %>
+
+<div class="col-md-12"  style="  display: block; 
+margin: auto;  
+width: 74%;    
+position: relative; 
+top: 50%;
+transform: translateY(-50%);">
+
+   <form  class="rounded" style="    width: 81%; margin-left: 10%;" method="post" enctype="multipart/form-data">
+         <h1 style="color: black; margin-left: 32%; margin-top: 20%;">ADD PRODUCT</h1>
+         <br>
+        <div class="mb-4">
+          
+            <label for="name"  class="form-label" style="color: black;">product :</label>
+            <input type="text" name="name"  class="form-control" id="productname" />
+            <p id="nameError" style="color: red"></p>
+        </div>
+        <div class="mb-4">
+          
+            <label for="name"  class="form-label" style="color: black;">Quantity :</label>
+            <input type="text" name="Quantity"  class="form-control" id="name" />
+            <p id="nameError" style="color: red"></p>
+        </div>
+        <div class="mb-4">
+          
+            <label for="name"  class="form-label" style="color: black;">Category :</label>
+            <select type="text" name="category"  class="form-control" id="category" >
+               <% category.forEach(data=>{%>
+                <option value="<%= data._id %>"><%= data.name %></option>
+              <% })%>
+            </select>
+            
+        </div>
+        <div class="mb-4">
+          
+            <label for="name"  class="form-label" style="color: black;text-shadow: 20%;">price :</label>
+            <input type="text" name="Price"  class="form-control" id="price" />
+            <p id="nameError" style="color: red"></p>
+        </div>
+   
+       
+       
+        <div class="mb-4">
+            <label for="Description" class="form-label" style="color: black;">Description :</label>
+            <input type="text" name="description"  class="form-control" id="description" />
+            <p id="DescriptionError" style="color: red"></p>
+        </div>
+        <div class="row d-flex justify-content-center ">
+            <div class="row d-flex justify-content-between ">
+        <div class="col-lg-3 col-md-6 rounded-image-preview">
+            <input name="image1" type="file" accept="image/*" id="imageInput1" class="imageInput" >
+            <label for="imageInput1" class="image-label">   
+                <img src="" style="width: 76px;" alt="">
+            </label>
+          
+        </div>
+        <div class="col-lg-3 col-md-6 rounded-image-preview">
+            <input name="image2" type="file" accept="image/*" id="imageInput2" class="imageInput" >
+            <label for="imageInput2" class="image-label">  
+                <img src="" style="width: 76px;" alt="">
+            </label>
+          
+        </div>
+        <div class="col-lg-3 col-md-6 rounded-image-preview">
+            <input name="image3" type="file" accept="image/*" id="imageInput2" class="imageInput" >
+            <label for="imageInput2" class="image-label">   
+                <img src="" style="width: 76px;" alt="">
+            </label>
+          
+        </div>
+        <div class="col-lg-3 col-md-6 rounded-image-preview">
+            <input name="image4" type="file" accept="image/*" id="imageInput2" class="imageInput" >
+            <label for="imageInput2" class="image-label">    
+                <img src="" style="width: 76px;" alt="">
+            </label>
+          
+        </div>
+            </div>
+        </div>
+        <div >
+            <button type="submit" style="    margin-top: 2%; margin-left: 85%; width: 17%;
+            text-align: center;" onclick="return validateForm()" class="btn btn-danger">submit</button>
+           
+        </div>
+       
+    </form>
+    <script>
+        function validateForm(){
+            var name=document.getElementById('productname').value
+            var Description=document.getElementById('description').value
+            console.log(name);  
+            console.log(Description);
+            if (!/^[a-zA-Z]+$/.test(name) || name.trim() === ""){
+                document.getElementById("nameError").innerText="plaes enter valid name "
+                return false
+            }else{
+                document.getElementById("nameError").innerText=""
+            }
+            if (Description.trim() === "") {
+                    document.getElementById("DescriptionError").innerText="pleas eneter discription"
+                    return false;
+                }else{
+                    document.getElementById("DescriptionError").innerText=""
+                }
+                return true
+        }
+        
+        </script>

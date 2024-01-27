@@ -1,0 +1,322 @@
+<%- include('../layout/user/header.ejs') %>
+<!-- Header part end-->
+
+<!--================Home Banner Area =================-->
+<!-- breadcrumb start-->
+<section class="breadcrumb breadcrumb_bg">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="breadcrumb_iner">
+          <div class="breadcrumb_iner_item">
+            <h2>Producta Checkout</h2>
+            <p>Home <span>-</span> Shop Single</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- breadcrumb start-->
+
+<!--================Checkout Area =================-->
+<section class="checkout_area padding_top">
+  <div class="container">
+    <form class="row contact_form" id="checkform" onsubmit="return validateForm()">
+    <div class="row">
+      
+        <% if(address && address.address && address.address.length>0){%>
+        <% address.address.forEach((data,index)=>{%>
+    
+            <div style="    margin-top: 16px; " class="col-md-4">
+              <div class="border border-secondary">
+                <input type="radio" id="selsectAddress<%=index%>" name="selsectAddress" value="<%=data._id%>" <%if (index==0) {%>checked<%}%>  >
+                <h4 class="account-title text-center">
+                    Address<%=index+1%> <hr>
+                </h4>
+                <p style="    margin-left: 20px;">
+                    Name:<%=data.name%> <br>
+                    Address:<%=data.address%> <br>
+                    Landmark:<%=data.landmark%> <br>
+                    State:<%=data.state%> <br>
+                    City:<%=data.city%> <br>
+                    Pincode:<%=data.pincode%> <br>
+                    Phone:<%=data.phone%> <br>
+                    Email:<%=data.email%> <br>
+
+                </p>
+                <div>
+            <a>	<i style="font-size: 1rem;margin-left: 5px;" data-id="<%=data._id%>" data-bs-toggle="modal" data-bs-target="#editModal" class="fa fa-edit"></i></a>
+            <a data-user-id="<%=data._id%>" class="deleteButton" ><i style="font-size: 1rem;" 	class="fa fa-trash"></i></a>
+        </div>
+              </div>
+
+            </div>
+            <%})%>
+        
+        <%}else{%>
+          
+           		
+    
+            
+    
+   
+    <div class="billing_details">
+      <div class="row">
+        <div class="col-lg-8">
+          <h3>Billing Details</h3>
+          <p id="nameError" style="color: red"></p>
+          <p id="Error" style="color: red"></p>
+            <div class="col-md-6 form-group p_star">
+              <input type="text" placeholder="Name" class="form-control" id="idname" name="name" />
+              <span class="" placeholder=" Name"></span>
+            </div>
+           
+            <p id="mobileError" class="error-message" style="color: red"></p>
+            <div class="col-md-6 form-group p_star">
+              <input type="text" placeholder="phone" class="form-control" id="idmobile" name="phone" />
+              <span class="" placeholder="Phone "></span>
+            </div>
+            <p id="stateError" class="error-message" style="color: red"></p>
+            <div class="col-md-6 form-group p_star">
+                <input type="text" placeholder="State" class="form-control" id="idstate" name="state" />
+                <span class="" placeholder="State "></span>
+              </div>
+              <p id="emailError" class="error-message" style="color: red"></p>
+            <div class="col-md-6 form-group p_star">
+              <input type="text" placeholder="Email" class="form-control" id="idemail" name="email" />
+              <span class="" placeholder="Email "></span>
+            </div>
+            <p id="pincodeError" class="error-message" style="color: red"></p>
+            <div class="col-md-6 form-group p_star">
+                <input type="text" placeholder="Pincode" class="form-control" id="idpincode" name="pincode" />
+                <span class="" placeholder="pinCode"></span>
+              </div>
+              <p id="addressError" class="error-message" style="color: red"></p>
+            <div class="col-md-12 form-group p_star">
+              <input type="text" placeholder="Address" class="form-control" id="idaddress" name="address" />
+              <span class="" placeholder="Address "></span>
+            </div>
+            <p id="landmarkError" class="error-message" style="color: red"></p>
+            <div class="col-md-12 form-group p_star">
+              <input type="text" placeholder="Landmark" class="form-control" id="idlandmark" name="landmark" />
+              <span class="" placeholder ="Landmark"></span>
+            </div>
+            
+            <p id="cityError" class="error-message" style="color: red"></p>
+            <div class="col-md-12 form-group p_star">
+              <input type="text" placeholder="city" class="form-control" id="idcity" name="city" />
+              <span class="" placeholder="City"></span>
+            </div>
+           
+            
+           
+            
+          
+        </div>
+        <%}%>
+        <div class="col-lg-4">
+          <div class="order_box">
+            <h2>Your Order</h2>
+            <ul class="list">
+              <li>
+                <a href="#">Product
+                  <span>Total</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">Fresh Blackberry
+                  <span class="middle">x 02</span>
+                  <span class="last">$720.00</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">Fresh Tomatoes
+                  <span class="middle">x 02</span>
+                  <span class="last">$720.00</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">Fresh Brocoli
+                  <span class="middle">x 02</span>
+                  <span class="last">$720.00</span>
+                </a>
+              </li>
+            </ul>
+            <ul class="list list_2">
+              <li>
+                <a href="#">Subtotal
+                  <span>$2160.00</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">Shipping
+                  <span>Flat rate: $50.00</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">Total
+                  <span>$2210.00</span>
+                </a>
+              </li>
+            </ul>
+            <div class="payment_item">
+              <div class="radion_btn">
+                <input type="radio" value="cash-on-delivery"  id="f-option5" name="selector" />
+                <label for="f-option5">Cash On Delivery</label>
+                <div class="check"></div>
+              
+            <div class="payment_item active">
+              <div class="radion_btn">
+                <input type="radio" value="wallet" id="f-option6" name="selector" />
+                <label for="f-option6">Wallet</label>
+                <img src="img/product/single-product/card.jpg" alt="" />
+                <div class="check"></div>
+
+                <div class="payment_item active">
+                  <div class="radion_btn">
+                    <input type="radio" value="Razorpay" id="f-option6" name="selector" />
+                    <label for="f-option6">Razorpay</label>
+                    <img src="img/product/single-product/card.jpg" alt="" />
+                    <div class="check"></div>
+              
+            
+            
+            <button class="btn_3" type="submit"  >proceed to order </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+     </div>
+  </div>
+  </div>
+  </div>
+  </div>
+    </div>
+</form>
+  </div>
+</section>
+<!--================End Checkout Area =================-->
+    <%- include('../layout/user/footer.ejs') %>
+    <script>
+    
+      function validateForm(){
+        console.log("yyyyyy");
+        var selectedAddress = document.querySelector('input[name="selsectAddress"]:checked');
+
+        if(selectedAddress){
+          return true
+        }else{
+        
+        console.log("hetttt");
+        var name=document.getElementById('idname').value
+        var email=document.getElementById('idemail').value
+        var mobile=document.getElementById('idmobile').value
+        var city=document.getElementById('idcity').value
+        var landmark=document.getElementById('idlandmark').value
+        var pinCode=document.getElementById('idpincode').value
+        var state=document.getElementById('idstate').value
+        var address=document.getElementById('idaddress').value
+        if(name==""||email==""||mobile==""||city==""||landmark==""||pinCode==""||state==""||address==""){
+            document.getElementById("Error").innerText="Empty input field . pleas fill "
+            return false
+        }
+        if(!/^[a-zA-Z\s]+$/.test(name)) {
+          
+            document.getElementById("nameError").innerText="pleas enter name "
+            return false
+        }else{
+          document.getElementById('nameError').innerText=""
+
+        }if(!/^[a-zA-Z_.-]+@[a-zA-Z-]+\.[a-zA-Z]{2,4}$/.test(email)){
+        document.getElementById("emailError").innerText="pleas enter valid email"
+        return false
+        }else{
+          document.getElementById('emailError').innerText=""
+        }if(!/^\d{10}$/.test(mobile)){
+        document.getElementById("mobileError").innerText="pleas enter 10 digit number"
+        return false
+      }else{
+        document.getElementById("mobileError").innerText=""
+      }if(!/^[a-zA-Z\s]+$/.test(city)) {
+          
+          document.getElementById("cityError").innerText="pleas enter City "
+          return false
+      }else{
+        document.getElementById('cityError').innerText=""
+
+      } if (!/^\d{6}$/.test(pinCode)) {
+    document.getElementById("pincodeError").innerText = "Please enter a valid 6-digit PIN code.";
+    return false;
+  } else {
+    document.getElementById('pincodeError').innerText = "";
+  } if (!/^[a-zA-Z0-9\s]+$/.test(landmark)) {
+    document.getElementById("landmarkError").innerText = "Please enter a valid landmark.";
+    return false;
+  } else {
+    document.getElementById('landmarkError').innerText = "";
+  }if(!/^[a-zA-Z\s]+$/.test(state)) {
+          
+    document.getElementById("statekError").innerText="pleas enter state "
+          return false
+ }else{
+        document.getElementById('stateError').innerText=""
+
+ }if (!/^[a-zA-Z0-9\s.,\-\/]+$/.test(address)) {
+    document.getElementById("addressError").innerText = "Please enter a valid address.";
+    return false;
+  } else {
+    document.getElementById('addressError').innerText = "";
+  }
+             return true
+}
+      }
+    
+    </script>
+
+<script>
+const  myform=document.getElementById('checkform') 
+console.log("vannie");
+
+myform.addEventListener('submit',function(event){
+  event.preventDefault();
+  console.log("vanuuuu");
+
+  if(validateForm()){
+    
+      
+       const formdata=$(this).serialize();
+       console.log("koiiii");
+
+   $.ajax({
+    type:'POST',
+    url:"/checkoutform",
+    data:formdata,
+    success:function(response){
+      location.href ='/success'
+    }
+   })
+
+    
+  }
+})
+
+
+
+</script>
+
+
+
+
+
+
+    <!-- <script>
+        
+      setTimeout(function() {
+        var errorMessage = document.getElementById('Error');
+        if (errorMessage) {
+          errorMessage.style.display = 'none';
+        }
+      }, 5000); 
+    </script> -->

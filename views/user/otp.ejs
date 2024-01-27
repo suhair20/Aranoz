@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="your-stylesheet.css">
+  <style>
+    body {
+      background: url('your-background-image.jpg') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    
+      .container {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 102px;
+    border-radius: 41px;
+    box-shadow: 15px 13px 19px 2px #cacaca;
+}
+
+    .title {
+      font-weight: 600;
+      margin-top: 20px;
+      font-size: 24px;
+    }
+
+    .bgWhite {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .customBtn {
+      border-radius: 0px;
+      padding: 10px;
+      background-color: #2fc63b;
+      color: #fff;
+    }
+
+    form input {
+    display: inline-block;
+    width: 64px;
+    height: 19px;
+    text-align: center;
+}
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="row justify-content-md-center">
+      <div class="col-md-4 text-center">
+        <div class="row">
+          <div class="col-sm-12 mt-5 bgWhite">
+            <div class="title">
+              Verify OTP
+            </div>
+            <% 
+            if(typeof message !== 'undefined'){
+              %>
+              <%- message %>
+              <%
+            }
+            %>
+            
+            <form action="/verifyotp" class="mt-5" method="post">
+              <input class="otp-input" type="number" name="otp" maxlength="4" required>
+              <button class='btn btn-primary btn-block mt-4 mb-4 customBtn' type="submit">Verify</button>
+            </form>
+            <hr class="mt-4">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
