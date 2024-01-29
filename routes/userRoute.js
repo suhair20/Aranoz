@@ -58,6 +58,7 @@ userRoute.post('/updatecart',cartcontroller.updatecart)
 userRoute.post('/checkoutform',ordercontroller.checkoutform)
 userRoute.get('/success',ordercontroller.success)
 userRoute.post('/changepassword',ordercontroller.changepassword)
+userRoute.get('/ordercancel',usercontroler.ordercancel)
 
 
 

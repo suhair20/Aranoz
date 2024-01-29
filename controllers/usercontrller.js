@@ -320,6 +320,14 @@ const checkout=async(req,res)=>{
     }
 }
 
+
+const ordercancel=async(req,res)=>{
+    try {
+        res.render('user/ordercancel')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 module.exports ={
     Loginhome,
     contactloading,
@@ -340,6 +348,7 @@ module.exports ={
     addresdeatials,
     editADDRUpdate,
     deletaddress,
-    checkout
+    checkout,
+    ordercancel
     
 }
