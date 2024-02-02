@@ -166,17 +166,18 @@
                 <label for="f-option5">Cash On Delivery</label>
                 <div class="check"></div>
               
-            <div class="payment_item active">
+            <div class="payment_item ">
               <div class="radion_btn">
                 <input type="radio" value="wallet" id="f-option6" name="selector" />
-                <label for="f-option6">Wallet</label>
+                <label for="f-option6
+                ">Wallet</label>
                 <img src="img/product/single-product/card.jpg" alt="" />
                 <div class="check"></div>
 
-                <div class="payment_item active">
+                <div class="payment_item ">
                   <div class="radion_btn">
-                    <input type="radio" value="Razorpay" id="f-option6" name="selector" />
-                    <label for="f-option6">Razorpay</label>
+                    <input type="radio" value="Razorpay" id="f-option7" name="selector" />
+                    <label for="f-option7">Razorpay</label>
                     <img src="img/product/single-product/card.jpg" alt="" />
                     <div class="check"></div>
               
@@ -199,6 +200,7 @@
 </section>
 <!--================End Checkout Area =================-->
     <%- include('../layout/user/footer.ejs') %>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
     
       function validateForm(){
@@ -294,7 +296,12 @@ myform.addEventListener('submit',function(event){
     url:"/checkoutform",
     data:formdata,
     success:function(response){
-      location.href ='/success'
+      if(response.success){
+        location.href ='/success'
+      }else if (response.success==false){
+        console.log("response success false");
+        razorpaypayment(response.order)
+      }
     }
    })
 
@@ -302,6 +309,47 @@ myform.addEventListener('submit',function(event){
   }
 })
 
+
+function razorpaypayment(order) {
+  let options = {
+                "key": "rzp_test_1o9zZLF7WbXBd7",
+                "amount": order.amount,
+                "currency": "INR",
+                "name": "Aranoz",
+                "description": "Test Transaction",
+                "image": "",
+                "order_id": order.id,
+                "handler": function (response) {
+                    verifyPayment(response, order)
+                },
+                "prefill": {
+                    "name": "Gaurav Kumar",
+                    "email": "gaurav.kumar@example.com",
+                    "contact": "9000090000"
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+            let raz = new Razorpay(options);
+            raz.open();
+}
+
+function verifyPayment(payment,order){
+  $.ajax({
+                    url: "/verifypayment",
+                    method: 'post',
+                    data: {
+                        payment,
+                        order
+                    },
+
+                  })
+
+}
 
 
 </script>

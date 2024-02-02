@@ -2,12 +2,20 @@ const User=require('../models/usermodel');
 const bcrypt=require('bcrypt');
 const Address=require('../models/AddressModal')
 const nodemailer=require('nodemailer');
-
+const Razorpay=require('razorpay')
+const dotenv=require('dotenv')
+dotenv.config()
+const crypto=require('crypto')
 const Product=require('../models/productModel')
  const cartModel=require('../models/cartModal');
 const { model } = require('mongoose');
 const addressModel = require('../models/AddressModal');
 const orderModel=require('../models/orderModals')
+
+const razorpay= new Razorpay({
+   key_id: process.env.KEY_Id,
+   key_secret: process.env.key_seceret,
+})
 
 
  const checkoutform=async(req,res)=>{
@@ -53,14 +61,29 @@ const orderModel=require('../models/orderModals')
      })
 
      await order.save()
+     const orderId=order._id
 
      if(status=="placed"){
       for(const product of cartitem){
          await Product.updateOne({_id:product.productId},{$inc:{quantity:-product.quantity}})
       }
       await cartdata.deleteOne({user:userId})
+
       res.json({success:true})
 
+     }else{
+     let options={
+      amount:subtotal*100,
+      currency:"INR",
+      receipt:""+orderId
+     }
+    razorpay.orders.create(options,function(err,order){
+      if(err){
+         console.log(err);
+      }else{
+         res.json({success:false,order})
+      }
+    })
      }
 
 
@@ -73,6 +96,39 @@ const orderModel=require('../models/orderModals')
     }
  }
 
+const verifypayment=async(req,res)=>{
+   try {
+      const id=req.session.userId
+      const data=req.body
+      const cartData=await cartModel.findOne({user:id})
+
+      const hmac = crypto.createHmac("sha256", process.env.KEY_SECRET);
+      hmac.update(data.razorpay_order_id + "|" + data.razorpay_payment_id);
+      const hmacValue = hmac.digest("hex");
+     
+      
+    if (hmacValue == data.razorpay_signature) {
+      for (const Data of cartData.product) {
+        const { productId, quantity } = Data;
+        await Product.updateOne({ _id: productId }, { $inc: { quantity: -quantity } });
+      }
+    }
+    const newOrder = await orderModel.findByIdAndUpdate(
+      { _id: data.order.receipt },
+      { $set: { orderStatus: "placed" } }
+    );
+    
+
+
+
+
+   } catch (error) {
+      console.log(error.message);
+   }
+}
+
+
+
  const success=async(req,res)=>{
    try {
       res.render('user/success')
@@ -81,35 +137,42 @@ const orderModel=require('../models/orderModals')
    }
  }
 
-const changepassword=async(req,res)=>{
+
+ const cancelproduct=async(req,res)=>{
    try {
-      const { current , newPass } = req.body;
-      console.log(req.body,'ddddddddddd');
-      const id = req.session.userId
-      const user = await User.findById(id)
-      console.log(user,'ffffffffffffffff');
-      if (!user) {
-          return res.json({ success: false, message: 'User not found.' });
-      }
-
-      const isPasswordMatch = await bcrypt.compare(current, user.password);
-
-      if (!isPasswordMatch) {
-          return res.json({ success: false, message: 'current password is not matching' });
-      }
-
-      const hashedPassword = await bcrypt.hash(newPass, 10);
-      user.password = hashedPassword;
-      await user.save();
-
-      return res.json({ success: true, message: 'Password changed successfully.' });
+       
+     const  productId=req.body.productId
+     const reason=req.body.cancelreason
+     
+       const order= await orderModel.findOneAndUpdate({'products._id':productId},{$set:{'products.$.productStatus':"cancelled",'products.$.cancelReason':reason}}, { new: true } )
+       res.json({cancel:true})
+       
+       
    } catch (error) {
-      console.log(error,message);
+       console.log(error.message);
    }
 }
+const retunproduct=async(req,res)=>{
+   try {
+       console.log("endhayi");
+     const  productId=req.body.productId
+     const reason=req.body.cancelreason
+     
+       const order= await orderModel.findOneAndUpdate({'products._id':productId},{$set:{'products.$.productStatus':"returned",'products.$.cancelReason':reason}}, { new: true } )
+       res.json({cancel:true})
+       console.log("common");
+       
+   } catch (error) {
+       console.log(error.message);
+   }
+}
+
 
  module.exports={
     checkoutform,
     success,
-    changepassword
+    cancelproduct,
+    retunproduct,
+    verifypayment
+    
  }

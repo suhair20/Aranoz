@@ -19,7 +19,7 @@ const orderSchema = new mongoose.Schema({
   products: [{
       productId: {
         type: mongoose.Types.ObjectId,
-        ref: 'Product',
+        ref: 'product',
         required: true
       },
       quantity: {
@@ -33,7 +33,7 @@ const orderSchema = new mongoose.Schema({
       totalPrice: {
       type: Number,
       default: 0
-    },
+    },  
     productStatus:{
         type: String,
         default: 'pending',
@@ -41,6 +41,9 @@ const orderSchema = new mongoose.Schema({
       },
     cancelReason: {
       type: String
+    },
+    returnReason:{
+      type:String
     }
   }],
   subtotal: {

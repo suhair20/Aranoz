@@ -39,6 +39,9 @@ adminRoute.get('/productedit',productcontroller.loadproductedit)
 adminRoute.post('/productedit',multer.uploadproduct,productcontroller.productedit)
 adminRoute.get('/addproduct',productcontroller.addproduct)
 adminRoute.post('/addproduct',multer.uploadproduct,productcontroller.addproductpost)
+adminRoute.get('/order',admincontroller.order)
+adminRoute.get('/orderview',admincontroller.orderview)
+adminRoute.post('/updatestatus',admincontroller.updatestatus)
 
 
 

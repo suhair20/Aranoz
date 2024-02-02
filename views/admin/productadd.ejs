@@ -51,30 +51,38 @@ transform: translateY(-50%);">
         <div class="row d-flex justify-content-center ">
             <div class="row d-flex justify-content-between ">
         <div class="col-lg-3 col-md-6 rounded-image-preview">
-            <input name="image1" type="file" accept="image/*" id="imageInput1" class="imageInput" >
+            <div class="image-preview" id="imagePreview1"></div>
+            <input name="image1" type="file" accept="image/*" id="imageInput1" class="imageInput" 
+            onchange="previewImage(this, 'imagePreview1')">
             <label for="imageInput1" class="image-label">   
-                <img src="" style="width: 76px;" alt="">
+                
             </label>
           
         </div>
         <div class="col-lg-3 col-md-6 rounded-image-preview">
-            <input name="image2" type="file" accept="image/*" id="imageInput2" class="imageInput" >
+            <div class="image-preview" id="imagePreview2"></div>
+            <input name="image2" type="file" accept="image/*" id="imageInput2" class="imageInput" 
+            onchange="previewImage(this, 'imagePreview2')">
             <label for="imageInput2" class="image-label">  
-                <img src="" style="width: 76px;" alt="">
+               
             </label>
           
         </div>
         <div class="col-lg-3 col-md-6 rounded-image-preview">
-            <input name="image3" type="file" accept="image/*" id="imageInput2" class="imageInput" >
+            <div class="image-preview" id="imagePreview3"></div>
+            <input name="image3" type="file" accept="image/*" id="imageInput3" class="imageInput" 
+            onchange="previewImage(this, 'imagePreview3')" >
             <label for="imageInput2" class="image-label">   
-                <img src="" style="width: 76px;" alt="">
+               
             </label>
           
         </div>
         <div class="col-lg-3 col-md-6 rounded-image-preview">
-            <input name="image4" type="file" accept="image/*" id="imageInput2" class="imageInput" >
+            <div class="image-preview" id="imagePreview4"></div>
+            <input name="image4" type="file" accept="image/*" id="imageInput4" class="imageInput"
+            onchange="previewImage(this, 'imagePreview4')" >
             <label for="imageInput2" class="image-label">    
-                <img src="" style="width: 76px;" alt="">
+                
             </label>
           
         </div>
@@ -107,5 +115,32 @@ transform: translateY(-50%);">
                 }
                 return true
         }
+
+
+
         
+        </script>
+          <script>
+            function previewImage(input, previewId) {
+                const preview = document.getElementById(previewId);
+                const file = input.files[0];
+    
+                if (file) {
+                    const reader = new FileReader();
+    
+                    reader.onload = function (e) {
+                        const image = new Image();
+                        image.src = e.target.result;
+                        image.width = 130;
+    
+                        preview.innerHTML = '';
+                        preview.appendChild(image);
+                    };
+    
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.innerHTML = '';
+                }
+            }
+    
         </script>

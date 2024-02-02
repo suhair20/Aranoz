@@ -135,11 +135,15 @@ const productedit=async (req,res)=>{
        const files=req.files
        console.log(files);
 
+
+       const existingData = await product.findOne({ _id: id });
        const img = [
-         files && files.image1 ? files.image1[0].filename : null,
-         files && files.image2 ? files.image2[0].filename : null,
-         files && files.image3 ? files.image3[0].filename : null,
-         files && files.image4 ? files.image4[0].filename : null,
+         
+
+         files?.image1 ? (files.image1[0]?.filename || existingData.images.image1) : existingData.images.image1,
+         files?.image2 ? (files.image2[0]?.filename || existingData.images.image2) : existingData.images.image2,
+         files?.image3 ? (files.image3[0]?.filename || existingData.images.image3) : existingData.images.image3,
+         files?.image4 ? (files.image4[0]?.filename || existingData.images.image4) : existingData.images.image4,
        ];
   
  const proceedimages=await Promise.all(

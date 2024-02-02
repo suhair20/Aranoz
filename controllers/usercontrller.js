@@ -323,11 +323,48 @@ const checkout=async(req,res)=>{
 
 const ordercancel=async(req,res)=>{
     try {
-        res.render('user/ordercancel')
+       const orderid=req.query.id
+       console.log(orderid);
+       const order=await orderModel.findById(orderid).populate('products.productId')
+       console.log(order);
+       
+        
+        res.render('user/ordercancel',{order})
     } catch (error) {
         console.log(error.message);
     }
 }
+
+const changepassword=async(req,res)=>{
+    try {
+       const { current , newPass } = req.body;
+       console.log(req.body,'ddddddddddd');
+       const id = req.session.userId
+       const user = await User.findById(id)
+       console.log(user,'ffffffffffffffff');
+       if (!user) {
+           return res.json({ success: false, message: 'User not found.' });
+       }
+ 
+       const isPasswordMatch = await bcrypt.compare(current, user.password);
+ 
+       if (!isPasswordMatch) {
+           return res.json({ success: false, message: 'current password is not matching' });
+       }
+ 
+       const hashedPassword = await bcrypt.hash(newPass, 10);
+       user.password = hashedPassword;
+       await user.save();
+ 
+       return res.json({ success: true, message: 'Password changed successfully.' });
+    } catch (error) {
+       console.log(error.message);
+    }
+ }
+
+
+
+ 
 module.exports ={
     Loginhome,
     contactloading,
@@ -349,6 +386,8 @@ module.exports ={
     editADDRUpdate,
     deletaddress,
     checkout,
-    ordercancel
+    ordercancel,
+    changepassword,
+    
     
 }

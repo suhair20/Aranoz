@@ -17,7 +17,7 @@ main {
 	grid-template-columns: 3fr 1fr;
 }
 nav {
-	position: fixed;
+	position: absolute;
 	top: 0;
 	width: 100%;
 	
@@ -27,7 +27,7 @@ nav {
 	display: flex;
 	
 	z-index: 2;
-    box-shadow: 0 0 10px rgba(0,0,0);
+    
 }
 
 nav a {
@@ -45,7 +45,7 @@ section {
 	color: black;
 }
 #portfolio {
-	background-color:whitesmoke;
+	background-color:aliceblue;
 	flex-direction: column;
     
 }
@@ -75,7 +75,7 @@ section {
     left: 0px;
     width: 81%;
     height: 72%;
-    background: #f0ecec;
+    background: aliceblue;
     border-radius: 8px;
 
 	
@@ -172,7 +172,7 @@ section {
 							day: 'numeric' }) %></td>
                         <td><%=order.subtotal%></td>
                         <td><%=order.payment%></td>
-                     <td ><a href="/ordercancel"><button class="btn btn-md rounded ">View</button></a></td>
+                     <td ><a href="/ordercancel?id=<%=order._id%>"><button class="btn btn-md rounded ">View</button></a></td>
                       </tr>
 					<%})%>
                     </tbody>
@@ -183,7 +183,7 @@ section {
 			</div>
 		
 	</div>
-	<aside id="aside">
+	<aside style="background-color: aliceblue;" id="aside">
        
 		<div>
             <ul class="menu-aside">

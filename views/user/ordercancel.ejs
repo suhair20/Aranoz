@@ -1,35 +1,198 @@
-<%- include('../layout/user/header.ejs') %>
-   <link rel="stylesheet" href="path/to/bootstrap.css">
-   <div>
+<style>
+  img {
+    max-width: 67%;
+  }
+  .img-fluid {
+    max-width: 94%;
+    height: auto;
+}
+.contain{
+  border-radius: 10px;
+    box-shadow: 0 0 10px;
+}
+.container{
+  border-radius: 10px;
+    box-shadow: 0 0 10px; 
+    height: 50%;
+}
 
-  <table class="table ">
-<thead>
+</style>
 
+<%- include('../layout/admin/header.ejs') %>
 
+<link rel="stylesheet" href="path/to/bootstrap.css">
+<h1 style="  font-size: 45px;  margin-left: 37%;">Order Detials</h1>
+<div class="card-body ">
+  <div class="container">
+<div class="row">
+  <div style="margin-left: 50px;" class="col-md-4">
+    <h2>Delivery Address</h2>
+    
+    <p style=" margin-top: 25px;   margin-left: 20px;">
+      Name:<%=order.delivery_address.name%> <br>
+      Address:<%=order.delivery_address.address%> <br>
+      Landmark:<%=order.delivery_address.landmark%> <br>
+      State:<%=order.delivery_address.state%> <br>
+      City:<%=order.delivery_address.city%> <br>
+      Pincode:<%=order.delivery_address.pincode%> <br>
+      Phone:<%=order.delivery_address.phone%> <br>
+      Email:<%=order.delivery_address.email%> <br>
 
-</thead>
-
-<tbody>
+    </p>
+  
+  </div>
+<div style="margin-left: 20%;" class="col-md-4">
+  <h2>Order Summary</h2>
  
-    <tr>
-    <td>elooo</td>
-    <td>hiiii</td>
-    <td>eiiii</td>
+    <p style=" margin-top: 25px;   margin-left: 20px;">
+ Orderid:<%=order._id%></5>
+ <br>
+ OrderDate :<%=order.orderDate.toLocaleDateString('en-US', {
+  weekday: 'short' , year: 'numeric' , month: 'short' ,
+  day: 'numeric' })%>
+ <br>
+ Ordereditems:
+ <br>
+ Subtotal Amount :<%=order.subtotal%>
+ <br>
+Discount Amount:
+<br>
+Payment method:<%=order.payment%>
+</p>
+</div>
+</div>
+</div>
+</div>
 
 
 
-    </tr>
 
+<div class="card-body">
+     <h1 style="margin-left: 45%;">Product</h1>
+    
+    <% order.products.forEach(function(product, index) { %>
+      <div class="">
+      <div style="    margin-left: 8%;margin-right: 98px;" class="row mb-2 border border-secondary">
+        <div class="col-md-2">
+          <img class="img-fluid" src="/sharpimages/<%= product.productId.images.image1 %>" alt="" />
+        </div>
+        <div style="    margin-left: 54px;" class="col-md-6">
+          <h4><%= product.productId.name %></h4>
+          <p>
+            Category: <!-- Add your category data here -->
+            <br>
+            Price: <%= product.price %>
+            <br>
+            Quantity: <%= product.quantity %>
+            <br>
+            Total Price: <%= product.totalPrice %>
+            <br>
+            Status : <%= product.productStatus %>
+            <br>
+            <%if( product.cancelReason!=undefined){%>
+            Reason : <%= product.cancelReason %>
+            <%}%>
+            
+            <br>
+           <% if(product.productStatus=="placed"||product.productStatus=="shipped"){%>
+            <button class="btn btn-danger " onclick="cancelproduct('<%=product._id%>')">Cancel</button>
+          <%}else if(product.productStatus=="delivered"){%>
+            <button class=" btn btn-danger " onclick="returnproduct('<%=product._id%>')">Return</button>
+           <%}%>
+          </p>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+  
+</div>
 
+      
+    
+    
+    <%- include('../layout/admin/footer.ejs') %>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      function cancelproduct(productId) {
+        console.log("helooo");
+        Swal.fire({
+            title: 'Enter Cancel reason',
+            input: 'text',
+            inputLabel: "Cancel Reason",
+            inputPlaceholder: 'please enter the reason for cancellation',
+            showCancelButton: true, 
+            confirmButtonText: 'Cancel Order',
+            cancelButtonText: 'Cancel', 
+            preConfirm: (cancelReason) => {
+                if (!cancelReason) {
+                    Swal.showValidationMessage('Cancel reason is required');
+                }
+                return cancelReason;
+            }
+        }).then((result)=>{
+          if(result.isConfirmed){
+            const data={
+              productId,
+              cancelreason:result.value
+            };
+            fetch('/cancelproduct',{
+              method:'POST',
+              headers:{
+                'Content-Type':'application/json',
+              },
+              body:JSON.stringify(data),
+            })
+            .then(response=>response.json())
+            .then(result=>{
+              if(result.cancel){
+                location.reload()
+              }
 
+            })
+          }
+        })
+      }
+    </script>
 
-</tbody>
+<script>
+  function returnproduct(productId) {
+    console.log("helooo");
+    Swal.fire({
+        title: 'Enter Return reason',
+        input: 'text',
+        inputLabel: "Return Reason",
+        inputPlaceholder: 'please enter the reason for Return',
+        showCancelButton: true, 
+        confirmButtonText: 'Return Order',
+        cancelButtonText: 'Cancel', 
+        preConfirm: (returnReason) => {
+            if (!returnReason) {
+                Swal.showValidationMessage('Return reason is required');
+            }
+            return returnReason;
+        }
+    }).then((result)=>{
+      if(result.isConfirmed){
+        const data={
+          productId,
+          cancelreason:result.value
+        };
+        fetch('/retunproduct',{
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json',
+          },
+          body:JSON.stringify(data),
+        })
+        .then(response=>response.json())
+        .then(result=>{
+          if(result.cancel){
+            location.reload()
+          }
 
-
-
-  </table>
-
-
-
-   </div>
-   <%- include('../layout/user/footer.ejs') %>
+        })
+      }
+    })
+  }
+</script>
+   

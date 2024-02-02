@@ -17,7 +17,7 @@ main {
 	grid-template-columns: 3fr 1fr;
 }
 nav {
-	position: fixed;
+	position: absolute;
 	top: 0;
 	width: 100%;
 	
@@ -27,7 +27,7 @@ nav {
 	display: flex;
 	
 	z-index: 2;
-    box-shadow: 0 0 10px rgba(0,0,0);
+
 }
 
 nav a {
@@ -45,7 +45,7 @@ section {
 	color: black;
 }
 #portfolio {
-	background-color:whitesmoke;
+	background-color:aliceblue;
 	flex-direction: column;
     
 }
@@ -193,7 +193,7 @@ section {
 			</div>
 		
 	</div>
-	<aside id="aside">
+	<aside style="background-color: aliceblue;" id="aside">
        
 		<div>
             <ul class="menu-aside">
@@ -260,7 +260,7 @@ section {
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form method="post" action="/editADDRUpdate">
+        <form method="post"  onsubmit="return  validateForm()" action="/editADDRUpdate">
 			<div class="row">
 			<div class="col-md-6">
           <div class="mb-3">
@@ -325,7 +325,9 @@ section {
 		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		</div>
 		<div class="modal-body">
-		  <form method="post" action="/addAddress">
+			<p id="nameError" style="color: red"></p>
+          <p id="Error" style="color: red"></p>
+		  <form method="post" onsubmit="return  validateForm()" action="/addAddress">
 			  <div class="row">
 			  <div class="col-md-6">
 			<div class="mb-3">

@@ -2,6 +2,7 @@ const User=require('../models/usermodel');
 const categoryModel=require('../models/categoryModel');
 const bcrypt=require('bcrypt');
 const Product=require('../models/productModel')
+const orderModel=require('../models/orderModals')
 
 
 
@@ -189,6 +190,44 @@ const deletcategory=async (req,res)=>{
   }
 }
 
+const order=async(req,res)=>{
+try {
+    
+    const order=await orderModel.find()
+    res.render('order',{order})
+} catch (error) {
+    console.log(error.message);
+}
+}
+
+const orderview=async(req,res)=>{
+    try {
+        
+      const  userId=req.query.id
+        detials=await orderModel.findById({_id:userId}).populate('products.productId')
+        res.render('orderview',{detials})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const updatestatus=async(req,res)=>{
+    try {
+        console.log("machiii");
+       const  productId=req.body.productId
+                
+     const status=req.body.status
+       console.log(status);
+       console.log(productId)
+       const updateorder=await orderModel.findOneAndUpdate({'products._id':productId},{$set:{'products.$.productStatus':status}},{new:true})
+       console.log(updateorder);
+       return res.json({success:true})
+       console.log("dooon");
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports ={
     loadlogin,
     loadhome,
@@ -203,6 +242,9 @@ module.exports ={
     updatingcategory,
     blockcategory,
     deletcategory,
+    order,
+    orderview,
+    updatestatus
     
 
 }

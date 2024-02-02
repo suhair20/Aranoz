@@ -4,6 +4,7 @@ const session= require('express-session')
 const config= require('../config/config');
 // const auth=require('../middleware/auth')
 const usercontroler=require('../controllers/usercontrller');
+
 const User = require('../models/usermodel');
 const userOTPVerification = require('../models/userOTPVerification');
 const { Error } = require('mongoose');
@@ -57,8 +58,11 @@ userRoute.post('/removecart',cartcontroller.removecart)
 userRoute.post('/updatecart',cartcontroller.updatecart)
 userRoute.post('/checkoutform',ordercontroller.checkoutform)
 userRoute.get('/success',ordercontroller.success)
-userRoute.post('/changepassword',ordercontroller.changepassword)
+userRoute.post('/changepassword',usercontroler.changepassword)
 userRoute.get('/ordercancel',usercontroler.ordercancel)
+userRoute.post('/cancelproduct',ordercontroller.cancelproduct)
+userRoute.post('/retunproduct',ordercontroller.retunproduct)
+userRoute.post('/verifypayment',ordercontroller.verifypayment)
 
 
 
