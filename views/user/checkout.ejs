@@ -311,7 +311,10 @@ myform.addEventListener('submit',function(event){
 
 
 function razorpaypayment(order) {
+  console.log("hekoooo");
+  console.log(order);
   let options = {
+    
                 "key": "rzp_test_1o9zZLF7WbXBd7",
                 "amount": order.amount,
                 "currency": "INR",
@@ -339,6 +342,8 @@ function razorpaypayment(order) {
 }
 
 function verifyPayment(payment,order){
+  console.log(payment,order,'hgghjhg');
+
   $.ajax({
                     url: "/verifypayment",
                     method: 'post',
@@ -346,6 +351,12 @@ function verifyPayment(payment,order){
                         payment,
                         order
                     },
+                    success:(response)=>{
+                      if(response.success){
+                        console.log("helooo");
+                        location.href ='/success'
+                      }
+                    }
 
                   })
 

@@ -43,7 +43,105 @@ const loadsign=async(req,res)=>{
  
 const loadhome=async(req,res)=>{
     try {
-        res.render('dashbord')
+     const  totalorders=await orderModel.countDocuments()
+     const totalproducts=await Product.countDocuments()
+     const revenue=await orderModel.aggregate([{
+       $group:{
+        _id:null,
+        revenue:{$sum:"$subtotal"}
+       }
+
+     }])
+     const currentMonth = new Date();
+     const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+     console.log("",startOfMonth);
+     const endOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+     endOfMonth.setMilliseconds(endOfMonth.getMilliseconds() - 1);
+     const currentMonthName = (new Date()).toLocaleString('default', { month: 'long' });
+
+     const monthlyrevenue=await orderModel.aggregate([
+       
+      {
+       $match:{
+        orderDate:{
+            $gte:startOfMonth,
+            $lt:endOfMonth
+        },
+    }
+},
+        {
+        $group:{
+          _id:{ $month: "$orderDate" },
+          monthlyrevenue:{$sum:"$subtotal"}
+
+        }
+       }
+     ])
+     console.log("gjf",monthlyrevenue);
+     const monthlyOrder= await orderModel.aggregate([
+        {
+          $match: {
+            orderDate: {
+              $gte: startOfMonth,
+              $lt: endOfMonth
+            }
+          }
+        },
+        {
+          $group: {
+            _id: { $month: "$orderDate" },
+            
+            monthlyOrder: { $sum: 1 } 
+          }
+        }
+      ]);
+      
+      console.log( " order",monthlyOrder);
+      /////////////////////////////////////////
+      const allMonthsData = Array.from({ length: 12 }, (_, index) => {
+        return {
+          month: index + 1,
+          monthlyrevenue: 0,
+          monthlyOrder: 0
+        };
+      });
+      
+      
+      if (monthlyrevenue.length > 0) {
+        allMonthsData[currentMonth.getMonth()] = {
+          month: currentMonth.getMonth() + 1,
+          monthlyrevenue: monthlyrevenue[0].monthlyrevenue,
+          monthlyOrder: monthlyOrder.length > 0 ? monthlyOrder[0].monthlyOrder : 0
+        };
+      }
+      
+      console.log("All Months Data:", allMonthsData);
+
+
+
+
+      ///////////////////////////
+      const monthlyRevenueArray = allMonthsData.map(entry => entry.monthlyrevenue);
+const monthlyOrderArray = allMonthsData.map(entry => entry.monthlyOrder);
+
+// Log the separate arrays
+console.log("Monthly Revenue Array:", monthlyRevenueArray);
+console.log("Monthly Order Array:", monthlyOrderArray);
+      
+
+
+
+
+
+     const cashondelivery=await orderModel.countDocuments({payment:"cash-on-delivery"})
+     const Razorpay=await orderModel.countDocuments({payment:"Razorpay"})
+    
+       const Wallet=await orderModel.countDocuments({payment:"'Wallet"})
+
+
+
+
+        res.render('dashbord',{totalorders,totalproducts,revenue,monthlyrevenue,currentMonthName, monthlyRevenueArray,cashondelivery,Razorpay,Wallet,monthlyOrderArray})
     } catch (error) {
         console.log(error.message); 
     }

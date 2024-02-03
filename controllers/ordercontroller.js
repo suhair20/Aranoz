@@ -98,11 +98,12 @@ const razorpay= new Razorpay({
 
 const verifypayment=async(req,res)=>{
    try {
+      console.log("hiiiiiiiiiiiiiiiiiiiiiii");
       const id=req.session.userId
       const data=req.body
       const cartData=await cartModel.findOne({user:id})
 
-      const hmac = crypto.createHmac("sha256", process.env.KEY_SECRET);
+      const hmac = crypto.createHmac("sha256", process.env.key_seceret);
       hmac.update(data.razorpay_order_id + "|" + data.razorpay_payment_id);
       const hmacValue = hmac.digest("hex");
      
@@ -117,7 +118,21 @@ const verifypayment=async(req,res)=>{
       { _id: data.order.receipt },
       { $set: { orderStatus: "placed" } }
     );
+    newOrder.products.forEach((product) => {
+      product.productStatus = "placed";
+    });
+    const orderItems = await orderModel.findByIdAndUpdate(
+      { _id: newOrder._id },
+      { $set: { products: newOrder.products } },
+      { new: true }
+    );
+
     
+
+
+console.log("vanniiiiiiiiiiiiii");
+
+    res.json({success:true})
 
 
 

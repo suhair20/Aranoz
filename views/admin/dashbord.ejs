@@ -129,7 +129,7 @@
                             <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                             <div class="text">
                                 <h6 class="mb-1 card-title">Revenue</h6>
-                                <span>$13,456.5</span>
+                                <span>₹<%=revenue[0].revenue%></span>
                                 <span class="text-sm"> Shipping fees are not included </span>
                             </div>
                         </article>
@@ -141,7 +141,7 @@
                             <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
                             <div class="text">
                                 <h6 class="mb-1 card-title">Orders</h6>
-                                <span>53.668</span>
+                                <span><%=totalorders%></span>
                                 <span class="text-sm"> Excluding orders in transit </span>
                             </div>
                         </article>
@@ -153,7 +153,7 @@
                             <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
                             <div class="text">
                                 <h6 class="mb-1 card-title">Products</h6>
-                                <span>9.856</span>
+                                <span><%=totalproducts%></span>
                                 <span class="text-sm"> In 19 Categories </span>
                             </div>
                         </article>
@@ -165,7 +165,7 @@
                             <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
                             <div class="text">
                                 <h6 class="mb-1 card-title">Monthly Earning</h6>
-                                <span>$6,982</span>
+                                <span>₹<%=monthlyrevenue[0].monthlyrevenue%></span>
                                 <span class="text-sm"> Based in your local time. </span>
                             </div>
                         </article>
@@ -527,3 +527,98 @@
         </section>
         <!-- content-main end// -->
         <%- include('../layout/admin/footer.ejs') %>
+
+    <script>
+(function ($) {
+    "use strict";
+
+    /*Sale statistics Chart*/
+    if ($('#myChart').length) {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+            
+            // The data for our dataset
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                        label: 'Sales',
+                        tension: 0.3,
+                        fill: true,
+                        backgroundColor: 'rgba(44, 120, 220, 0.2)',
+                        borderColor: 'rgba(44, 120, 220)',
+                        data:<%=JSON.stringify(monthlyRevenueArray)%>
+                    },
+                    {
+                        label: 'Order',
+                        tension: 0.3,
+                        fill: true,
+                        backgroundColor: 'rgba(4, 209, 130, 0.2)',
+                        borderColor: 'rgb(4, 209, 130)',
+                        data: <%=JSON.stringify(monthlyOrderArray)%>
+                    },
+                    // {
+                    //     label: 'Products',
+                    //     tension: 0.3,
+                    //     fill: true,
+                    //     backgroundColor: 'rgba(380, 200, 230, 0.2)',
+                    //     borderColor: 'rgb(380, 200, 230)',
+                    //     data: [30, 10, 27, 19, 33, 15, 19, 20, 24, 15, 37, 6]
+                    // }
+
+                ]
+            },
+            options: {
+                plugins: {
+                legend: {
+                    labels: {
+                    usePointStyle: true,
+                    },
+                }
+                }
+            }
+        });
+    }
+
+
+
+
+
+
+     /*Sale statistics Chart*/
+     if ($('#myChart2').length) {
+        var ctx = document.getElementById("myChart2");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+            labels: [' COD', 'wallet', 'razorpay'],
+            datasets: [
+                {
+                    label: "payment",
+                    backgroundColor: "#5897fb",
+                    barThickness:10,
+                    data: ['<%=cashondelivery%>','<%=Wallet%>','<%=Razorpay%>']
+                }, 
+                
+            ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                        usePointStyle: true,
+                        },
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    } //end if
+    
+})(jQuery);
+</script>
