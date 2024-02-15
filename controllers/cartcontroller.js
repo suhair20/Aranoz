@@ -5,6 +5,7 @@ const nodemailer=require('nodemailer');
 
 const Product=require('../models/productModel')
  const cartModel=require('../models/cartModal')
+ const wihslistModel=require('../models/whishlistModel')
 
 
 const cartload=async(req,res)=>{
@@ -45,7 +46,7 @@ const getcart=async(req,res)=>{
                 const data={
                     productId:product_id,
                     price:productprice,
-                    totalprice:productprice,
+                    totalPrice:productprice,
                 }
                 console.log(data);
 
@@ -124,9 +125,55 @@ const updatecart=async(req,res)=>{
     }
 }
 
+const getwhislist=async(req,res)=>{
+    try {
+       if(req.session.userId){
+         const productId=req.body.productId
+         const userId=req.session.userId
+         const whishlist=await wihslistModel.findOne({user:userId,'product.productId':productId})
+         if(whishlist){
+            await wihslistModel.findOneAndUpdate({user:userId,'product.productId':productId},{$pull:{'product':{'productId':productId}}})
+            res.json({remove:true,productId:productId})
+         }else{
+         const data={
+            productId:productId
+         }
+
+         await wihslistModel.findOneAndUpdate({user:userId},{$addToSet:{product:data}},{upsert:true,new:true})
+
+             res.json({add:true,productId:productId})
+         }
+       }else{
+        res.json({user:true})
+       }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const removewishlist=async(req,res)=>{
+    try {
+       
+                console.log("hiiiiiiiiiiiiiii");
+                const{productId,userId}=req.body
+                const updatewhisist=await wihslistModel.findOneAndUpdate({user:userId},{$pull:{'product':{'productId':productId}}},{new:true});
+               if(updatewhisist){
+                res.json({success:true})
+               } else {
+                res.status(404).json({ error: 'Product not found in the cart' });
+              }
+           
+        
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
 module.exports={
     cartload,
     getcart,
     removecart,
-    updatecart
+    updatecart,
+    getwhislist,
+    removewishlist
 }

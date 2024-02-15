@@ -2,9 +2,10 @@ const User=require('../models/usermodel');
 const bcrypt=require('bcrypt');
 const Address=require('../models/AddressModal')
 const nodemailer=require('nodemailer');
-
+const cartModel=require('../models/cartModal')
 const Product=require('../models/productModel')
 const orderModel=require('../models/orderModals')
+const wihslistModel=require('../models/whishlistModel')
 
 //MONGO DB USER OTP VERIFIATION MODEL/////
 const userOTPVerification= require("./../models/userOTPVerification");
@@ -311,10 +312,17 @@ const deletaddress=async(req,res)=>{
 
 const checkout=async(req,res)=>{
     try {
-        console.log("hiiiiiiiiiiiiiii");
+      const Wallet= await User.findById(req.session.userId)
         const userid=req.session.userId
         const address=await Address.findOne({user:userid})
-        res.render('user/checkout',{address})
+    
+        const cartdata=await cartModel.findOne({user:userid}).populate('product.productId')
+        console.log(cartdata);
+         if(cartdata){
+             const subtotal=cartdata.product.reduce((acc,val)=>acc+(val.price)*val.quantity,0)
+             res.render('user/checkout',{address,subtotal,Wallet})
+         }
+       
     } catch (error) {
         console.log(error.messge);
     }
@@ -326,10 +334,16 @@ const ordercancel=async(req,res)=>{
        const orderid=req.query.id
        console.log(orderid);
        const order=await orderModel.findById(orderid).populate('products.productId')
-       console.log(order);
        
-        
-        res.render('user/ordercancel',{order})
+       
+            
+       var deliverydate=new Date(order.orderDate)
+       var currentDate=new Date()
+       var timedifference= currentDate.getTime()-deliverydate.getTime()
+       var daysDifference = timedifference / (1000 * 3600 * 24);
+       var daysDifferenceRounded = Math.round(daysDifference);
+       
+        res.render('user/ordercancel',{order,daysDifferenceRounded})
     } catch (error) {
         console.log(error.message);
     }
@@ -361,7 +375,30 @@ const changepassword=async(req,res)=>{
        console.log(error.message);
     }
  }
+ const loadWallet=async(req,res)=>{
+    try {
+       const userId=req.session.userId
+        const user= await User.findById(userId)
+        console.log(user);
+        res.render('user/Wallet',{user})
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+ }
 
+ const loadwishlist=async(req,res)=>{
+    try {
+        console.log("helloo");
+       const  userId= req.session.userId
+       console.log(userId);
+      const data=await wihslistModel.findOne({user:userId}).populate('product.productId')
+      console.log(data);
+        res.render('user/wishlist',{data,userId})
+    } catch (error) {
+        console.log(error.mesage);
+    }
+ }
 
 
  
@@ -388,6 +425,8 @@ module.exports ={
     checkout,
     ordercancel,
     changepassword,
+    loadWallet,
+    loadwishlist
     
     
 }

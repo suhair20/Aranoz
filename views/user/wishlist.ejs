@@ -1,0 +1,217 @@
+<%- include('../layout/user/header.ejs') %>
+    
+  
+  
+    <!--================Home Banner Area =================-->
+    <!-- breadcrumb start-->
+    <section class="breadcrumb breadcrumb_bg">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="breadcrumb_iner">
+              <div class="breadcrumb_iner_item">
+                <h2>Whishlist</h2>
+                <p>Home <span>-</span>Whishlist</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- breadcrumb start-->
+  
+    <!--================Cart Area =================-->
+    <section class="cart_area padding_top">
+      <div class="container">
+        <div id="reloadDiv" class="cart_inner">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Product</th>
+                 
+              </thead>
+              <tbody>
+              
+                <% if (  data && data.product && data.product.length > 0) { %>
+
+               <% data.product.forEach((function(product,index){%>
+           
+                <tr>
+                  <td>
+                    <div class="media">
+                      <div style="width: 22%;" class="d-flex">
+                        <img src="/sharpimages/<%= product.productId.images.image1%>" alt="" />
+                      </div>
+                      <div class="media-body">
+                        <p style="font-size: 167%;font-family: emoji;"><%=product.productId.name%></p>
+                        <p>jgsduiafsdifgdsifasdf asifiss dis sifgsidf s </p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    
+                  </td>
+                  <td>
+					<div class="cupon_text float-right">
+						<a class="btn_1"  onclick="addToCart('<%=product.productId._id%>')" >Addtocart</a>
+					  </div>
+                  </td>
+                  <td>
+                    <button class="remove" id="closeButton"
+                    onclick="removeProduct('<%= product.productId._id %>','<%=userId%>')">
+                    <i class="fa fa-trash"></i>
+                </button>
+                  </td>
+                </tr>
+                <% }))%>
+               
+                
+               
+               
+                
+                    
+              
+              <% } else { %>
+                <tr>
+                    <td colspan="whatever">No products in the cart</td>
+                </tr>
+            <% } %>
+              </tbody>
+            </table>
+           
+          </div>
+        </div>
+    </section>
+    <%- include('../layout/user/footer.ejs') %>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      function removeProduct(productId,userId){
+        data={productId,userId}
+        Swal.fire({
+                title: 'Are you sure?',
+                text: 'This product will be removed',
+                icon: 'question',
+                reverseButtons: true,
+                confirmButtonText: 'Yes',
+                showCancelButton: true,
+                confirmButtonColor: '#1e6e2c',
+                cancelButtonColor: '#97a399',
+        }).then((result)=>{
+          if(result.isConfirmed){
+			console.log("vanuu");
+            fetch('/removewishlist',{
+             method:'POST',
+             headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+            })
+            .then(Response=>Response.json())
+            .then(Response=>{
+              if(Response.success){
+                
+               location.reload()
+              }
+            })
+          }
+        })
+      }
+    </script>
+    <script>
+       function updateQuantity(productId, count) {
+            const data = { productId, count };
+            $.ajax({
+                url: '/updatecart',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),   
+                success: (response) => {
+                    if (response.success) {
+                      console.log("wecome");
+                    
+                        $("#reloadDiv").load("/cart #reloadDiv");
+                    } else {
+                        swal.fire({
+                            icon: "info",
+                            title: "Oops...",
+                            text:response.message,
+                        });
+                    }
+                },
+                error: (error) => {
+                    console.error('Error updating cart:', error);
+                }
+            });
+        }
+    </script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+   function addToCart(id){
+    console.log("hiiiiiiii");
+    $.ajax({
+      url:'/getcart',
+      method:'POST',
+      data:{id:id},
+      success:function(response){
+        console.log(response);
+       if(response.success){
+        Swal.fire({
+                    title: 'Item Added to Cart',
+                    text: 'Do you want to see cart?',
+                    icon: 'success',
+                    confirmButtonText: 'Show Cart',
+                    confirmButtonColor: '#1e6e2c',
+                    timer: 2000,
+                    
+                }).then((result)=>{
+                  if(result.isConfirmed){
+                    window.location.href = '/cart';
+                  }
+                })
+       }else if(response.status=='alreadyAdded'){
+        Swal.fire({
+                    title: 'Already added',
+                    text: 'Do you want to see cart?',
+                    icon: 'info',
+                    confirmButtonText: 'Show Cart',
+                    confirmButtonColor: '#1e6e2c',
+                    timer: 2000,
+                  }).then((result)=>{
+                  if(result.isConfirmed){
+                    window.location.href = '/cart';
+                  }
+                })
+       }
+       else if(response.stock){
+                    Swal.fire({
+                    title: 'Out of Stock',
+                    text: 'come again later',
+                    icon: 'error',
+                    confirmButtonText: 'ok',
+                    confirmButtonColor: '#1e6e2c',
+                    timer: 2000,
+                
+                })
+              }
+                else if (response.failed) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Please Login",
+                        confirmButtonColor: "#3085d6",
+                        confirmButtonText: "Login",
+                        showCancelButton: true,
+                        cancelButtonColor: "#d33",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.href = "/login";
+                        }
+                                  });
+      }
+    }
+    })
+   }
+
+  </script>

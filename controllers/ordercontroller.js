@@ -20,6 +20,7 @@ const razorpay= new Razorpay({
 
  const checkoutform=async(req,res)=>{
     try {
+     
      const userId=req.session.userId
      const selectaddress=req.body.selsectAddress
      const paymentmethod=req.body.selector
@@ -27,7 +28,7 @@ const razorpay= new Razorpay({
      console.log(paymentmethod);
 
 
-     let status=paymentmethod=="cash-on-delivery" ? "placed":"pending"
+     let status=paymentmethod=="cash-on-delivery"||paymentmethod=="wallet" ? "placed":"pending"
 
      if(selectaddress==undefined||selectaddress==null){
         const{name,phone,state,email,pincode,address,landmark,city}=req.body
@@ -63,7 +64,21 @@ const razorpay= new Razorpay({
      await order.save()
      const orderId=order._id
 
-     if(status=="placed"){
+     if(paymentmethod=="cash-on-delivery"){
+      for(const product of cartitem){
+         await Product.updateOne({_id:product.productId},{$inc:{quantity:-product.quantity}})
+      }
+      await cartdata.deleteOne({user:userId})
+
+      res.json({success:true})
+   }else if(paymentmethod=="wallet"){
+      const data={
+         amount:-subtotal,
+         date:new Date()
+      }
+
+      await User.findOneAndUpdate({_id:userId},{$inc:{wallet:-subtotal},$push:{walletHistory:data}})
+
       for(const product of cartitem){
          await Product.updateOne({_id:product.productId},{$inc:{quantity:-product.quantity}})
       }
@@ -128,7 +143,7 @@ const verifypayment=async(req,res)=>{
     );
 
     
-
+    await cartData.deleteOne({ user: id });
 
 console.log("vanniiiiiiiiiiiiii");
 
@@ -169,13 +184,32 @@ console.log("vanniiiiiiiiiiiiii");
 }
 const retunproduct=async(req,res)=>{
    try {
-       console.log("endhayi");
+      console.log("dfghjk"); 
      const  productId=req.body.productId
+     const userId=req.session.userId
+     console.log(userId);
      const reason=req.body.cancelreason
+     const orderId=req.body.orderId
+     const updateOrder=await orderModel.findById(orderId)
+      
+
+   
+     const product =updateOrder.products.find((product)=>product._id.toString()===productId)
+     
+     const Walletamount=product.totalPrice
+
+     const data={
+      amount:Walletamount,
+      date:Date.now(),
+     }
+     await Product.updateOne({ _id: productId }, { $inc: { quantity: 1 } });
+     await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: Walletamount }, $push: { walletHistory: data } })
+     
+     
      
        const order= await orderModel.findOneAndUpdate({'products._id':productId},{$set:{'products.$.productStatus':"returned",'products.$.cancelReason':reason}}, { new: true } )
        res.json({cancel:true})
-       console.log("common");
+       
        
    } catch (error) {
        console.log(error.message);

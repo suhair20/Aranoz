@@ -4,7 +4,7 @@
     <aside class="navbar-aside" id="offcanvas_aside">
         <div class="aside-top">
             <a href="index.html" class="brand-wrap">
-                <img src="/asset/img/logo.png" class="logo" alt="Nest Dashboard" />
+                <img src="/asset/img/logo.png" class="logo" alt="Aranoz" />
             </a>
             <div>
                 <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
@@ -44,6 +44,12 @@
                             <span class="text">Order</span>
                         </a>
                         </li>
+                        <li class="menu-item ">
+                            <a class="menu-link" href="/admin/Coupon">
+                                <i class="icon material-icons md-store"></i>
+                                <span class="text">Coupon</span>
+                            </a>
+                            </li>
                   
                 
             
@@ -100,13 +106,9 @@
                     <li class="dropdown nav-item">
                         <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/assets/imgs/people/avatar-2.png" alt="User" /></a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                            <a  class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                        
+                            <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
                         </div>
                     </li>
                 </ul>
@@ -116,10 +118,17 @@
             <div class="content-header">
                 <div>
                     <h2  class="content-title card-title">Dashboard</h2>
-                    <p>Whole data about your business here</p>
+                   
                 </div>
-                <div>
-                    <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a>
+                <div style="width: 46%;" class="dropdown "  >
+                    <a style="width: 42%;"  class=" dropdown-toggle btn btn-primary"  data-bs-toggle="dropdown" id="dropdownAccount" aria-expanded="false"><i class="text-muted material-icons md-post_add"></i>Sales reports</a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                        <a  class="dropdown-item" href="/admin/salesreport?id=Yearly "><i class="material-icons md-settings"></i>Yearly</a>
+                        <a class="dropdown-item" href="/admin/salesreport?id=Monthly " ><i class="material-icons md-settings"></i>Monthly</a>
+                        <a class="dropdown-item" href="/admin/salesreport?id=Weekly"><i class="material-icons md-settings"></i>Weekly</a>
+                        
+                       
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -154,7 +163,7 @@
                             <div class="text">
                                 <h6 class="mb-1 card-title">Products</h6>
                                 <span><%=totalproducts%></span>
-                                <span class="text-sm"> In 19 Categories </span>
+                               
                             </div>
                         </article>
                     </div>
@@ -621,4 +630,29 @@
     } //end if
     
 })(jQuery);
+</script>
+<script>
+
+    function getSalesData(sssss){
+     console.log(sssss);
+     $.ajax({
+        type:'POST',
+        url:`/admin/salesreport?value=${sssss}`,
+        success: function (data) {
+            console.log(data,"dsd");
+            if(data.success){
+                console.log("hiiii");
+
+                
+                console.log(data.yearlyorder);
+                window.location.href = `/admin/salesreport?value=${data}`; 
+            }
+            // Handle the successful response here
+        },
+        error: function (error) {
+            console.error('Error:', error);
+            // Handle errors here
+        }
+     })
+    }
 </script>

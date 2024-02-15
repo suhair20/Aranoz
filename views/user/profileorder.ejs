@@ -164,7 +164,7 @@ section {
                     </thead>
                     <tbody>
 						<%console.log(order,"hiii");%>
-						<%order.forEach((order,index)=>{%>
+						<%order.reverse().forEach((order,index)=>{%>
                       <tr>
                         <th scope="row"><%=index+1%></th>
                         <td> <%= order.orderDate.toLocaleDateString('en-US', {
@@ -201,7 +201,7 @@ section {
                     
                 </li>
                 <li class="menu-item ">
-                    <a class="menu-link" href="">
+                    <a class="menu-link" href="/Wallet">
                         <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Wallet</span>
                     </a>

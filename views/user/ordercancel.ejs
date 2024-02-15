@@ -45,7 +45,7 @@
   <h2>Order Summary</h2>
  
     <p style=" margin-top: 25px;   margin-left: 20px;">
- Orderid:<%=order._id%></5>
+ Orderid:<%=order._id%>
  <br>
  OrderDate :<%=order.orderDate.toLocaleDateString('en-US', {
   weekday: 'short' , year: 'numeric' , month: 'short' ,
@@ -97,9 +97,16 @@ Payment method:<%=order.payment%>
            <% if(product.productStatus=="placed"||product.productStatus=="shipped"){%>
             <button class="btn btn-danger " onclick="cancelproduct('<%=product._id%>')">Cancel</button>
           <%}else if(product.productStatus=="delivered"){%>
-            <button class=" btn btn-danger " onclick="returnproduct('<%=product._id%>')">Return</button>
-           <%}%>
+            <%if(daysDifferenceRounded<=2){%>
+           
+            <button class=" btn btn-danger " onclick="returnproduct('<%=product._id%>','<%=order._id%>')">Return</button>
+           
+            <% }else{%>
+            <div style=" padding-bottom: 30px; color: red;">your order is coming soon</div>
+          <%  } %>
+          <% } %>
           </p>
+          
         </div>
       </div>
     </div>
@@ -155,7 +162,7 @@ Payment method:<%=order.payment%>
     </script>
 
 <script>
-  function returnproduct(productId) {
+  function returnproduct(productId,orderId) {
     console.log("helooo");
     Swal.fire({
         title: 'Enter Return reason',
@@ -175,6 +182,7 @@ Payment method:<%=order.payment%>
       if(result.isConfirmed){
         const data={
           productId,
+          orderId,
           cancelreason:result.value
         };
         fetch('/retunproduct',{

@@ -1,5 +1,19 @@
 
 <%- include('../layout/admin/header.ejs') %>
+<style>
+    .form-control, .form-select {
+    background-color: #f4f5f9;
+    border: 2px solid #f4f5f9;
+    font-size: 13px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    padding-left: 20px;
+    color: #4f5d77;
+    width: 100%;
+    border-radius: 9px;
+    height: 75px;
+}
+</style>
 
 
 <body>
@@ -35,13 +49,19 @@
                     </a>
                    
                 </li>
-                <li class="menu-item active ">
+                <li class="menu-item  ">
                     <a class="menu-link" href="/admin/product">
                         <i class="icon material-icons md-store"></i>
                         <span class="text">product</span>
                     </a>
                     
                 </li>
+                <li class="menu-item active  ">
+                    <a class="menu-link" href="/admin/order">
+                        <i class="icon material-icons md-store"></i>
+                        <span class="text">Order</span>
+                    </a>
+                    </li>
                 
                    
               
@@ -117,42 +137,41 @@
         <section class="content-main">
             <div class="content-header">
                 <div>
-                    <h2 class="content-title card-title">Products List</h2>
-                    <p>Lorem ipsum dolor sit amet.</p>
+                    <h2 class="content-title card-title"></h2>
+                  
                 </div>
-                <div>
-                    <a href="#" class="btn btn-light rounded font-md">Export</a>
-                    <a href="#" class="btn btn-light rounded font-md">Import</a>
-                  <a href="/admin/addproduct">  <button type="button" class="btn btn-primary"   >add product</button></a>
-                </div>
+            
             </div>
             <div class="card mb-4">
 
                 <header class="card-header">
                     <div class="row align-items-center">
                         <div class="col col-check flex-grow-0">
-                            <div class="form-check ms-2">
-                                <input class="form-check-input" type="checkbox" value="" />
-                            </div>
+                            
                         </div>
-                        <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
-                            <select class="form-select">
-                                <option selected>All category</option>
-                                <option>Electronics</option>
-                                <option>Clothes</option>
-                                <option>Automobile</option>
-                            </select>
+                        
+                        <div class="col-md-4 col-6">
+                            <p style="font-size: 15px;"  class="form-control" >
+                                <a style="color: black;">   name:</a>  <%=detials.delivery_address.name%><br>
+                                <a style="color: black;">  Address:</a> <%=detials.delivery_address.address%>
+
+                                
+                            </p>
                         </div>
-                        <div class="col-md-2 col-6">
-                            <input type="date" value="02.05.2021" class="form-control" />
+                        <div class="col-md-4 col-6">
+                            <p style="font-size: 15px;" class="form-control" >
+                             <a style="color: black;">   Email: </a> <%=detials.delivery_address.email%><br>
+                             <a style="color: black;">   LandMark:</a><%=detials.delivery_address.landmark%><br>
+                             <a style="color: black;">    State:</a><%=detials.delivery_address.state%>
+                                
+                            </p>
                         </div>
-                        <div class="col-md-2 col-6">
-                            <select class="form-select">
-                                <option selected>Status</option>
-                                <option>Active</option>
-                                <option>Disabled</option>
-                                <option>Show all</option>
-                            </select>
+                        <div class="col-md-3 col-6">
+                            <p style="font-size: 15px;"   class="form-control" >
+                                <a style="color: black;">    Phone:</a>  <%=detials.delivery_address.phone%><br>
+                                <a style="color: black;">  Pincode:</a> <%=detials.delivery_address.pincode%>
+                                
+                            </p>
                         </div>
                     </div>
                 </header>
@@ -201,10 +220,11 @@
                                             <span class="badge rounded-pill alert-success text-success">Delivered</span>
                                         <% } else if (user.productStatus === 'cancelled') { %>
                                             <span class="badge rounded-pill alert-danger text-danger">Cancelled</span>
-                                        <% } else if (user.productStatus === 'Return') { %>
-                                            <span class="badge rounded-pill alert-secondary text-secondary">Returned</span>
+                                        <% } else if (user.productStatus === 'returned') { %>
+                                            <span class="badge rounded-pill alert-danger  text-danger ">Returned</span>
                                         <% } %>
                                  </td>
+                                 <%if(user.productStatus!=="returned" &&user.productStatus!=="cancelled"){%>
                                  <td><select  id="<%=detials._id%><%=user._id%>"onchange="status('<%=detials._id%>', '<%=user._id%>')">
                                     <option value="placed" <% if
                                     (user.productStatus=='placed' ) { %> selected <% } %>
@@ -220,10 +240,11 @@
                                         %>>delivered</option>
                                 
                                 
-                                
+                                       
                                 </select></td>
                               
-                               
+                                <%}%>
+
 </tr>
                                 <%})%>
                                 </tbody>
@@ -239,20 +260,7 @@
                 <!-- card-body end// -->
             </div>
             <!-- card end// -->
-            <div class="pagination-area mt-30 mb-50">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+           
 
 
 

@@ -211,7 +211,7 @@ section {
                     
                 </li>
                 <li class="menu-item ">
-                    <a class="menu-link" href="">
+                    <a class="menu-link" href="/Wallet">
                         <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Wallet</span>
                     </a>
@@ -325,45 +325,52 @@ section {
 		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		</div>
 		<div class="modal-body">
-			<p id="nameError" style="color: red"></p>
+			
           <p id="Error" style="color: red"></p>
 		  <form method="post" onsubmit="return  validateForm()" action="/addAddress">
 			  <div class="row">
 			  <div class="col-md-6">
 			<div class="mb-3">
 			  <label for="recipient-name" class="col-form-label">Name:</label>
-			  <input type="text" name="name" class="form-control" id="">
+			  <input type="text" name="name" class="form-control" id="idname">
+			  <p id="nameError" style="color: red"></p>
 			</div>
 			<div class="mb-3">
 			  <label for="recipient-name" class="col-form-label">Address:</label>
-			  <input type="text" name="address" class="form-control" id="">
+			  <input type="text" name="address" class="form-control"  id="idaddress">
+			  <p id="addressError" style="color: red"></p>
 			</div>
 			<div class="mb-3">
+				<p id="landmarkError" class="error-message" style="color: red"></p>
 			  <label for="recipient-name" class="col-form-label">Landmark:</label>
-			  <input type="text" name="landmark" class="form-control" >
+			  <input type="text" name="landmark" class="form-control" id="idlandmark" >
 			</div>
 			<div class="mb-3">
 			  <label for="recipient-name" class="col-form-label">State:</label>
-			  <input type="text" name="state" class="form-control" id="">
+			  <input type="text" name="state" class="form-control" id="idstate">
 			</div>
 			  </div>
 			  <div class="col-md-6">
 			<div class="mb-3">
+				<p id="cityError" class="error-message" style="color: red"></p>
 			  <label for="recipient-name" class="col-form-label">City:</label>
-			  <input type="text" name="city" class="form-control" id="">
+			  <input type="text" name="city" class="form-control" id="idcity">
 			</div>
 			<div class="mb-3">
+				<p id="pincodeError" class="error-message" style="color: red"></p>
 			  <label for="recipient-name" class="col-form-label">Pincode:</label>
-			  <input type="text" name="pincode" class="form-control" id="">
+			  <input type="text" name="pincode" class="form-control" id="idpincode">
 			  
 			</div>
 			<div class="mb-3">
 			  <label for="recipient-name" class="col-form-label">phone:</label>
-			  <input type="text" name="phone" class="form-control" id="">
+			  <input type="text" name="phone" class="form-control" id="idmobile">
+			  <p id="mobileError" class="error-message" style="color: red"></p>
 			</div>
 			<div class="mb-3">
+				<p id="emailError" class="error-message" style="color: red"></p>
 			  <label for="recipient-name" class="col-form-label">Email:</label>
-			  <input type="text" name="email" class="form-control" id="">
+			  <input type="text" name="email" class="form-control" id="idemail">
 			</div>
 		  </div>
 		  <div class="col-md-12">

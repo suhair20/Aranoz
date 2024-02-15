@@ -11,6 +11,7 @@ const { Error } = require('mongoose');
 const bcrypt=require("bcrypt");
 const nodemailer=require('nodemailer');
 const auth = require('../middleware/auth')
+const block = require('../middleware/Block')
 const cartcontroller=require('../controllers/cartcontroller')
 const ordercontroller=require('../controllers/ordercontroller')
 
@@ -41,24 +42,28 @@ userRoute.get('/login',auth.isLogout,usercontroler.loadlogin);
 userRoute.post('/login',usercontroler.verifylogin)
 userRoute.get('/signup',auth.isLogout,usercontroler.loadsignup);
 userRoute.get('/verifyotp',usercontroler.verifyOTP);
-userRoute.get('/profile',auth.isLogin,usercontroler.loadprofile)
+userRoute.get('/wishlist',usercontroler.loadwishlist)
+userRoute.post('/getwhislist',cartcontroller.getwhislist)
+userRoute.post('/removewishlist',cartcontroller.removewishlist)
+userRoute.get('/profile',auth.isLogin,block.blockeduser,usercontroler.loadprofile)
+userRoute.get('/Wallet',usercontroler.loadWallet)
 userRoute.get('/logout',auth.isLogin,usercontroler.loadlogout)
-userRoute.get('/singleproduct',usercontroler.singleproduct)
-userRoute.get('/profileorder',usercontroler.getprofileorder)
-userRoute.get("/profileaddress",usercontroler.getprofileaddress)
-userRoute.get("/profilepassword",usercontroler.getprofilepassword)
+userRoute.get('/singleproduct',auth.isLogin,block.blockeduser,usercontroler.singleproduct)
+userRoute.get('/profileorder',auth.isLogin,block.blockeduser,usercontroler.getprofileorder)
+userRoute.get("/profileaddress",auth.isLogin,block.blockeduser,usercontroler.getprofileaddress)
+userRoute.get("/profilepassword",auth.isLogin,block.blockeduser,usercontroler.getprofilepassword)
 userRoute.get('/profilelogout',usercontroler.getprofilelogout)
-userRoute.post('/updateuser',usercontroler.updateuser)
-userRoute.post('/addAddress',usercontroler.addAddress)
-userRoute.get('/addresdetials/:id',usercontroler.addresdeatials)
-userRoute.post('/editADDRUpdate',usercontroler.editADDRUpdate)
-userRoute.delete('/deletaddress/:id',usercontroler.deletaddress)
-userRoute.post('/getcart',cartcontroller.getcart)
-userRoute.post('/removecart',cartcontroller.removecart)
-userRoute.post('/updatecart',cartcontroller.updatecart)
-userRoute.post('/checkoutform',ordercontroller.checkoutform)
-userRoute.get('/success',ordercontroller.success)
-userRoute.post('/changepassword',usercontroler.changepassword)
+userRoute.post('/updateuser',auth.isLogin,block.blockeduser,usercontroler.updateuser)
+userRoute.post('/addAddress',auth.isLogin,block.blockeduser,usercontroler.addAddress)
+userRoute.get('/addresdetials/:id',auth.isLogin,block.blockeduser,usercontroler.addresdeatials)
+userRoute.post('/editADDRUpdate',auth.isLogin,block.blockeduser,usercontroler.editADDRUpdate)
+userRoute.delete('/deletaddress/:id',auth.isLogin,block.blockeduser,usercontroler.deletaddress)
+userRoute.post('/getcart',auth.isLogin,block.blockeduser,cartcontroller.getcart)
+userRoute.post('/removecart',auth.isLogin,block.blockeduser,cartcontroller.removecart)
+userRoute.post('/updatecart',auth.isLogin,block.blockeduser,cartcontroller.updatecart)
+userRoute.post('/checkoutform',auth.isLogin,block.blockeduser,ordercontroller.checkoutform)
+userRoute.get('/success',auth.isLogin,block.blockeduser,ordercontroller.success)
+userRoute.post('/changepassword',auth.isLogin,block.blockeduser,usercontroler.changepassword)
 userRoute.get('/ordercancel',usercontroler.ordercancel)
 userRoute.post('/cancelproduct',ordercontroller.cancelproduct)
 userRoute.post('/retunproduct',ordercontroller.retunproduct)
@@ -105,7 +110,7 @@ userRoute.post('/signup',auth.isLogout,(req,res)=>{
                 newUser.save()
             
                 .then((result)=>{
-                    console.log("helloo come");
+                    console.log("helloo come",result);
                     req.session.userId=result._id
                    sendOTPVerificationEmail(result,res);
                 })
@@ -148,6 +153,7 @@ const  sendOTPVerificationEmail=(async({_id,email},res)=>{
         html:`<p>Enter <b> ${otp}</b> in the app to verify your email address and complete the size </p>`,
         
        };
+       
        const saltRounds = 10;
         const hashedOTP= await bcrypt.hash(otp,saltRounds); 
     
@@ -165,10 +171,7 @@ const  sendOTPVerificationEmail=(async({_id,email},res)=>{
         res.redirect('/verifyotp')
 
     } catch (error) {
-        res.json({
-            status:"Failed",
-            message:error.message
-        })
+        console.log(error)
     }
 })
 //nodemailer

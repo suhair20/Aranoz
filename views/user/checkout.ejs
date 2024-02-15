@@ -1,5 +1,11 @@
 <%- include('../layout/user/header.ejs') %>
 <!-- Header part end-->
+<style>
+  .order_box .payment_item p {
+    background: #ecfdff;
+    padding: 20px;
+}
+</style>
 
 <!--================Home Banner Area =================-->
 <!-- breadcrumb start-->
@@ -117,34 +123,10 @@
         <%}%>
         <div class="col-lg-4">
           <div class="order_box">
-            <h2>Your Order</h2>
-            <ul class="list">
-              <li>
-                <a href="#">Product
-                  <span>Total</span>
-                </a>
-              </li>
-              <li>
-                <a href="#">Fresh Blackberry
-                  <span class="middle">x 02</span>
-                  <span class="last">$720.00</span>
-                </a>
-              </li>
-              <li>
-                <a href="#">Fresh Tomatoes
-                  <span class="middle">x 02</span>
-                  <span class="last">$720.00</span>
-                </a>
-              </li>
-              <li>
-                <a href="#">Fresh Brocoli
-                  <span class="middle">x 02</span>
-                  <span class="last">$720.00</span>
-                </a>
-              </li>
-            </ul>
+           
+            
             <ul class="list list_2">
-              <li>
+              <!-- <li>
                 <a href="#">Subtotal
                   <span>$2160.00</span>
                 </a>
@@ -153,10 +135,10 @@
                 <a href="#">Shipping
                   <span>Flat rate: $50.00</span>
                 </a>
-              </li>
+              </li> -->
               <li>
                 <a href="#">Total
-                  <span>$2210.00</span>
+                  <span>₹<%=subtotal%></span>
                 </a>
               </li>
             </ul>
@@ -165,14 +147,6 @@
                 <input type="radio" value="cash-on-delivery"  id="f-option5" name="selector" />
                 <label for="f-option5">Cash On Delivery</label>
                 <div class="check"></div>
-              
-            <div class="payment_item ">
-              <div class="radion_btn">
-                <input type="radio" value="wallet" id="f-option6" name="selector" />
-                <label for="f-option6
-                ">Wallet</label>
-                <img src="img/product/single-product/card.jpg" alt="" />
-                <div class="check"></div>
 
                 <div class="payment_item ">
                   <div class="radion_btn">
@@ -180,6 +154,25 @@
                     <label for="f-option7">Razorpay</label>
                     <img src="img/product/single-product/card.jpg" alt="" />
                     <div class="check"></div>
+              
+            <div class="payment_item ">
+              <div class="radion_btn">
+                <%if(Wallet.wallet<subtotal){%>
+                  <div>
+                  <input type="radio" value="wallet" id="f-option6" name="selector" disabled />
+                  <label for="f-option6">Wallet</label>
+                  <div class="check"></div>
+                  <p>Wallet Balance :₹<%=Wallet.wallet%>(not enough balance)</p>
+                
+               
+             <%}else{%>
+              <input type="radio" value="wallet" id="f-option6" name="selector" />
+              <label for="f-option6">Wallet</label>
+              <div class="check"></div>   
+              <p style="background: #ecfdff;">Wallet Balance :₹<%=Wallet.wallet%></p>
+            <% }%>
+
+                
               
             
             
@@ -224,7 +217,7 @@
             document.getElementById("Error").innerText="Empty input field . pleas fill "
             return false
         }
-        if(!/^[a-zA-Z\s]+$/.test(name)) {
+        if(!/^[a-zA-Z]+(?: [a-zA-Z]+)*$/.test(name))  {
           
             document.getElementById("nameError").innerText="pleas enter name "
             return false
@@ -241,7 +234,7 @@
         return false
       }else{
         document.getElementById("mobileError").innerText=""
-      }if(!/^[a-zA-Z\s]+$/.test(city)) {
+      }if(!/^[a-zA-Z]+(?: [a-zA-Z]+)*$/.test(city)) {
           
           document.getElementById("cityError").innerText="pleas enter City "
           return false
@@ -260,7 +253,7 @@
     document.getElementById('landmarkError').innerText = "";
   }if(!/^[a-zA-Z\s]+$/.test(state)) {
           
-    document.getElementById("statekError").innerText="pleas enter state "
+    document.getElementById("stateError").innerText="pleas enter state "
           return false
  }else{
         document.getElementById('stateError').innerText=""
