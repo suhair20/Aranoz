@@ -14,6 +14,7 @@ const auth = require('../middleware/auth')
 const block = require('../middleware/Block')
 const cartcontroller=require('../controllers/cartcontroller')
 const ordercontroller=require('../controllers/ordercontroller')
+const couponcontroller=require('../controllers/couponController')
 
 
 
@@ -68,6 +69,8 @@ userRoute.get('/ordercancel',usercontroler.ordercancel)
 userRoute.post('/cancelproduct',ordercontroller.cancelproduct)
 userRoute.post('/retunproduct',ordercontroller.retunproduct)
 userRoute.post('/verifypayment',ordercontroller.verifypayment)
+userRoute.post('/applycoupon',couponcontroller.applycoupon)
+userRoute.post('/removecoupon',couponcontroller.removecoupon)
 
 
 

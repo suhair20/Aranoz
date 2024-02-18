@@ -1,132 +1,224 @@
 <%- include('../layout/user/header.ejs') %>
-<!-- Header part end-->
-<style>
-  .order_box .payment_item p {
-    background: #ecfdff;
-    padding: 20px;
-}
-</style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-<!--================Home Banner Area =================-->
-<!-- breadcrumb start-->
-<section class="breadcrumb breadcrumb_bg">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <div class="breadcrumb_iner">
-          <div class="breadcrumb_iner_item">
-            <h2>Producta Checkout</h2>
-            <p>Home <span>-</span> Shop Single</p>
+  <!-- Header part end-->
+  <style>
+    .order_box .payment_item p {
+      background: #ecfdff;
+      padding: 20px;
+    }
+  </style>
+
+  <!--================Home Banner Area =================-->
+  <!-- breadcrumb start-->
+  <section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="breadcrumb_iner">
+            <div class="breadcrumb_iner_item">
+              <h2>Producta Checkout</h2>
+              <p>Home <span>-</span> Shop Single</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  </section>
+
+
+  <button type="button" class="tp_btn " data-bs-toggle="modal" data-bs-target="#addModal"
+    style=" margin-left: 122px; margin-top: 36px;">Apply Coupon</button></a></a>
+
+
+  <div class="modal fade modal-xl" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="exampleModalLabel">Coupons</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div id="reloadDiv" class="row">
+
+              <% for(let i=0;i<coupons.length;i++){%>
+                <div class="col-md-5"
+                  style="padding: 20px; border: 1px solid #ccc; border-radius: 30px; margin-left: 20px;">
+                  <div class="card-body d-flex justify-content-center align-items-center">
+                    <div class="card-body ">
+                      <div>
+                        <h4 style="margin-left: 47px;">
+                          <%=coupons[i].name%>
+                        </h4>
+                        <p style="margin-left: 20px;">
+                          Code:<%=coupons[i].couponCode%>
+                            discountAmount:<%=coupons[i].discountAmount%>
+                              Only applicable if you order above <b> ₹<%=coupons[i].criteriaAmount%>
+
+
+                              </b>
+
+
+                        </p>
+                        <% if(subtotal>coupons[i].criteriaAmount){%>
+
+                          <%if(discountAmount&&coupons[i]._id.toString()!==(cartdata.couponDiscount?cartdata.couponDiscount._id.toString():null)){%>
+                            <button style="    margin-left: 21px;
+                  margin-top: 25px;" type="submit" onclick="applyCoupon('<%=coupons[i]._id%>')" class="btn_3"> <span>
+                                Apply</span></button>
+
+
+                            <% }else{%>
+                              <button type="submit" style="    margin-left: 21px; margin-top: 25px;"
+                                onclick="removeCoupon('<%=coupons[i]._id%>')" class="btn_3"> <span> Remove</span>
+                              </button>
+
+                              <%}%>
+
+                                <%}else{%>
+
+                                  <%}%>
+
+                      </div>
+
+                    </div>
+
+
+                  </div>
+                </div>
+
+                <%}%>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
   </div>
-</section>
-<!-- breadcrumb start-->
 
-<!--================Checkout Area =================-->
-<section class="checkout_area padding_top">
-  <div class="container">
-    <form class="row contact_form" id="checkform" onsubmit="return validateForm()">
-    <div class="row">
-      
-        <% if(address && address.address && address.address.length>0){%>
-        <% address.address.forEach((data,index)=>{%>
-    
-            <div style="    margin-top: 16px; " class="col-md-4">
-              <div class="border border-secondary">
-                <input type="radio" id="selsectAddress<%=index%>" name="selsectAddress" value="<%=data._id%>" <%if (index==0) {%>checked<%}%>  >
-                <h4 class="account-title text-center">
-                    Address<%=index+1%> <hr>
-                </h4>
-                <p style="    margin-left: 20px;">
-                    Name:<%=data.name%> <br>
-                    Address:<%=data.address%> <br>
-                    Landmark:<%=data.landmark%> <br>
-                    State:<%=data.state%> <br>
-                    City:<%=data.city%> <br>
-                    Pincode:<%=data.pincode%> <br>
-                    Phone:<%=data.phone%> <br>
-                    Email:<%=data.email%> <br>
 
-                </p>
-                <div>
-            <a>	<i style="font-size: 1rem;margin-left: 5px;" data-id="<%=data._id%>" data-bs-toggle="modal" data-bs-target="#editModal" class="fa fa-edit"></i></a>
-            <a data-user-id="<%=data._id%>" class="deleteButton" ><i style="font-size: 1rem;" 	class="fa fa-trash"></i></a>
-        </div>
-              </div>
 
-            </div>
-            <%})%>
-        
-        <%}else{%>
-          
-           		
-    
-            
-    
-   
-    <div class="billing_details">
-      <div class="row">
-        <div class="col-lg-8">
-          <h3>Billing Details</h3>
-          <p id="nameError" style="color: red"></p>
-          <p id="Error" style="color: red"></p>
-            <div class="col-md-6 form-group p_star">
-              <input type="text" placeholder="Name" class="form-control" id="idname" name="name" />
-              <span class="" placeholder=" Name"></span>
-            </div>
-           
-            <p id="mobileError" class="error-message" style="color: red"></p>
-            <div class="col-md-6 form-group p_star">
-              <input type="text" placeholder="phone" class="form-control" id="idmobile" name="phone" />
-              <span class="" placeholder="Phone "></span>
-            </div>
-            <p id="stateError" class="error-message" style="color: red"></p>
-            <div class="col-md-6 form-group p_star">
-                <input type="text" placeholder="State" class="form-control" id="idstate" name="state" />
-                <span class="" placeholder="State "></span>
-              </div>
-              <p id="emailError" class="error-message" style="color: red"></p>
-            <div class="col-md-6 form-group p_star">
-              <input type="text" placeholder="Email" class="form-control" id="idemail" name="email" />
-              <span class="" placeholder="Email "></span>
-            </div>
-            <p id="pincodeError" class="error-message" style="color: red"></p>
-            <div class="col-md-6 form-group p_star">
-                <input type="text" placeholder="Pincode" class="form-control" id="idpincode" name="pincode" />
-                <span class="" placeholder="pinCode"></span>
-              </div>
-              <p id="addressError" class="error-message" style="color: red"></p>
-            <div class="col-md-12 form-group p_star">
-              <input type="text" placeholder="Address" class="form-control" id="idaddress" name="address" />
-              <span class="" placeholder="Address "></span>
-            </div>
-            <p id="landmarkError" class="error-message" style="color: red"></p>
-            <div class="col-md-12 form-group p_star">
-              <input type="text" placeholder="Landmark" class="form-control" id="idlandmark" name="landmark" />
-              <span class="" placeholder ="Landmark"></span>
-            </div>
-            
-            <p id="cityError" class="error-message" style="color: red"></p>
-            <div class="col-md-12 form-group p_star">
-              <input type="text" placeholder="city" class="form-control" id="idcity" name="city" />
-              <span class="" placeholder="City"></span>
-            </div>
-           
-            
-           
-            
-          
-        </div>
-        <%}%>
-        <div class="col-lg-4">
-          <div class="order_box">
-           
-            
-            <ul class="list list_2">
-              <!-- <li>
+
+
+  <h2 style=" color: #030E4F;   margin-top: 45px;
+  margin-left: 500px;">Billing Details</h2>
+
+  <!-- breadcrumb start-->
+
+  <!--================Checkout Area =================-->
+  <section class="checkout_area padding_top">
+
+    <div class="container">
+     
+      <form class="row contact_form" id="checkform" onsubmit="return validateForm()">
+        <div style="width: 100%;" class="row">
+          <div style="gap: 22px;" class="col-md-8 d-flex " >
+            <% if(address && address.address && address.address.length>0){%>
+              <% address.address.forEach((data,index)=>{%>
+
+                <div style="  max-width: 300px;  margin-top: 16px; ">
+                  <div style="max-width: 300px;" class="border border-secondary">
+                    <input type="radio" id="selsectAddress<%=index%>" name="selsectAddress" value="<%=data._id%>" <%if
+                      (index==0) {%>checked<%}%> >
+                      <h4 class="account-title text-center">
+                        Address<%=index+1%>
+                          <hr>
+                      </h4>
+                      <p style="    margin-left: 20px;">
+                        Name:<%=data.name%> <br>
+                          Address:<%=data.address%> <br>
+                            Landmark:<%=data.landmark%> <br>
+                              State:<%=data.state%> <br>
+                                City:<%=data.city%> <br>
+                                  Pincode:<%=data.pincode%> <br>
+                                    Phone:<%=data.phone%> <br>
+                                      Email:<%=data.email%> <br>
+
+                      </p>
+                      <div>
+                        <a> <i style="font-size: 1rem;margin-left: 5px;" data-id="<%=data._id%>" data-bs-toggle="modal"
+                            data-bs-target="#editModal" class="fa fa-edit"></i></a>
+                        <a data-user-id="<%=data._id%>" class="deleteButton"><i style="font-size: 1rem;"
+                            class="fa fa-trash"></i></a>
+                      </div>
+                  </div>
+
+                </div>
+                <%})%>
+
+                  <%}else{%>
+
+
+
+
+
+
+                    <div class="billing_details">
+                      
+                        
+                          
+                          <p id="nameError" style="color: red"></p>
+                          <p id="Error" style="color: red"></p>
+                          <div class="col-md-10 form-group p_star">
+                            <input type="text" placeholder="Name" class="form-control" id="idname" name="name" />
+                            <span class="" placeholder=" Name"></span>
+                          </div>
+
+                          <p id="mobileError" class="error-message" style="color: red"></p>
+                          <div class="col-md-10 form-group p_star">
+                            <input type="text" placeholder="phone" class="form-control" id="idmobile" name="phone" />
+                            <span class="" placeholder="Phone "></span>
+                          </div>
+                          <p id="stateError" class="error-message" style="color: red"></p>
+                          <div class="col-md-10 form-group p_star">
+                            <input type="text" placeholder="State" class="form-control" id="idstate" name="state" />
+                            <span class="" placeholder="State "></span>
+                          </div>
+                          <p id="emailError" class="error-message" style="color: red"></p>
+                          <div class="col-md-10 form-group p_star">
+                            <input type="text" placeholder="Email" class="form-control" id="idemail" name="email" />
+                            <span class="" placeholder="Email "></span>
+                          </div>
+                          <p id="pincodeError" class="error-message" style="color: red"></p>
+                          <div class="col-md-10 form-group p_star">
+                            <input type="text" placeholder="Pincode" class="form-control" id="idpincode"
+                              name="pincode" />
+                            <span class="" placeholder="pinCode"></span>
+                          </div>
+                          <p id="addressError" class="error-message" style="color: red"></p>
+                          <div class="col-md-12 form-group p_star">
+                            <input style="width: 204%;" type="text" placeholder="Address" class="form-control" id="idaddress"
+                              name="address" />
+                            <span class="" placeholder="Address "></span>
+                          </div>
+                          <p id="landmarkError" class="error-message" style="color: red"></p>
+                          <div class="col-md-12 form-group p_star">
+                            <input style="width: 204%;" type="text" placeholder="Landmark" class="form-control" id="idlandmark"
+                              name="landmark" />
+                            <span class="" placeholder="Landmark"></span>
+                          </div>
+
+                          <p id="cityError" class="error-message" style="color: red"></p>
+                          <div class="col-md-12 form-group p_star">
+                            <input style="width: 204%;" type="text" placeholder="city" class="form-control" id="idcity" name="city" />
+                            <span class="" placeholder="City"></span>
+                          </div>
+
+
+
+
+
+                        </div>
+                        <%}%>
+                        
+                      </div>
+                      <div class="col-lg-4">
+                            <div id="reloadAmount" class="order_box">
+
+
+                              <ul class="list list_2">
+                                <!-- <li>
                 <a href="#">Subtotal
                   <span>$2160.00</span>
                 </a>
@@ -136,239 +228,349 @@
                   <span>Flat rate: $50.00</span>
                 </a>
               </li> -->
-              <li>
-                <a href="#">Total
-                  <span>₹<%=subtotal%></span>
-                </a>
-              </li>
-            </ul>
-            <div class="payment_item">
-              <div class="radion_btn">
-                <input type="radio" value="cash-on-delivery"  id="f-option5" name="selector" />
-                <label for="f-option5">Cash On Delivery</label>
-                <div class="check"></div>
+                                <li>
+                                  <a href="#">Total
+                                    <% if (discountAmount !==subtotal ) { %>
+                                      Original Amount: ₹ <del>
+                                        <%= subtotal %>
+                                      </del> <br>
+                                      Discounted Amount: ₹<%= discountAmount %>
+                                        <% } else { %>
+                                          ₹<%= subtotal %>
+                                            <% } %>
 
-                <div class="payment_item ">
-                  <div class="radion_btn">
-                    <input type="radio" value="Razorpay" id="f-option7" name="selector" />
-                    <label for="f-option7">Razorpay</label>
-                    <img src="img/product/single-product/card.jpg" alt="" />
-                    <div class="check"></div>
-              
-            <div class="payment_item ">
-              <div class="radion_btn">
-                <%if(Wallet.wallet<subtotal){%>
-                  <div>
-                  <input type="radio" value="wallet" id="f-option6" name="selector" disabled />
-                  <label for="f-option6">Wallet</label>
-                  <div class="check"></div>
-                  <p>Wallet Balance :₹<%=Wallet.wallet%>(not enough balance)</p>
-                
-               
-             <%}else{%>
-              <input type="radio" value="wallet" id="f-option6" name="selector" />
-              <label for="f-option6">Wallet</label>
-              <div class="check"></div>   
-              <p style="background: #ecfdff;">Wallet Balance :₹<%=Wallet.wallet%></p>
-            <% }%>
+                                  </a>
+                                </li>
+                              </ul>
+                              <div class="payment_item">
+                                <div class="radion_btn">
+                                  <input type="radio" value="cash-on-delivery" id="f-option5" name="selector" />
+                                  <label for="f-option5">Cash On Delivery</label>
+                                  <div class="check"></div>
 
-                
-              
-            
-            
-            <button class="btn_3" type="submit"  >proceed to order </button>
+                                  <div class="payment_item ">
+                                    <div class="radion_btn">
+                                      <input type="radio" value="Razorpay" id="f-option7" name="selector" />
+                                      <label for="f-option7">Razorpay</label>
+                                      <img src="img/product/single-product/card.jpg" alt="" />
+                                      <div class="check"></div>
+
+                                      <div class="payment_item ">
+                                        <div class="radion_btn">
+                                          <%if(Wallet.wallet<subtotal){%>
+                                            <div>
+                                              <input type="radio" value="wallet" id="f-option6" name="selector"
+                                                disabled />
+                                              <label for="f-option6">Wallet</label>
+                                              <div class="check"></div>
+                                              <p>Wallet Balance :₹<%=Wallet.wallet%>(not enough balance)</p>
+
+
+                                              <%}else{%>
+                                                <input type="radio" value="wallet" id="f-option6" name="selector" />
+                                                <label for="f-option6">Wallet</label>
+                                                <div class="check"></div>
+                                                <p style="background: #ecfdff;">Wallet Balance :₹<%=Wallet.wallet%>
+                                                </p>
+                                                <% }%>
+
+
+
+
+
+                                                  <button class="btn_3" type="submit">proceed to order </button>
+                                            </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                    
           </div>
-        </div>
-      </div>
+      </form>
     </div>
-    </div>
-     </div>
-  </div>
-  </div>
-  </div>
-  </div>
-    </div>
-</form>
-  </div>
-</section>
-<!--================End Checkout Area =================-->
-    <%- include('../layout/user/footer.ejs') %>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+  <!--================End Checkout Area =================-->
+  <%- include('../layout/user/footer.ejs') %>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-    
-      function validateForm(){
+
+      function validateForm() {
         console.log("yyyyyy");
         var selectedAddress = document.querySelector('input[name="selsectAddress"]:checked');
 
-        if(selectedAddress){
+        if (selectedAddress) {
           return true
-        }else{
-        
-        console.log("hetttt");
-        var name=document.getElementById('idname').value
-        var email=document.getElementById('idemail').value
-        var mobile=document.getElementById('idmobile').value
-        var city=document.getElementById('idcity').value
-        var landmark=document.getElementById('idlandmark').value
-        var pinCode=document.getElementById('idpincode').value
-        var state=document.getElementById('idstate').value
-        var address=document.getElementById('idaddress').value
-        if(name==""||email==""||mobile==""||city==""||landmark==""||pinCode==""||state==""||address==""){
-            document.getElementById("Error").innerText="Empty input field . pleas fill "
+        } else {
+
+          console.log("hetttt");
+          var name = document.getElementById('idname').value
+          var email = document.getElementById('idemail').value
+          var mobile = document.getElementById('idmobile').value
+          var city = document.getElementById('idcity').value
+          var landmark = document.getElementById('idlandmark').value
+          var pinCode = document.getElementById('idpincode').value
+          var state = document.getElementById('idstate').value
+          var address = document.getElementById('idaddress').value
+          if (name == "" || email == "" || mobile == "" || city == "" || landmark == "" || pinCode == "" || state == "" || address == "") {
+            document.getElementById("Error").innerText = "Empty input field . pleas fill "
             return false
+          }
+          if (!/^[a-zA-Z]+(?: [a-zA-Z]+)*$/.test(name)) {
+
+            document.getElementById("nameError").innerText = "pleas enter name "
+            return false
+          } else {
+            document.getElementById('nameError').innerText = ""
+
+          } if (!/^[a-zA-Z_.-]+@[a-zA-Z-]+\.[a-zA-Z]{2,4}$/.test(email)) {
+            document.getElementById("emailError").innerText = "pleas enter valid email"
+            return false
+          } else {
+            document.getElementById('emailError').innerText = ""
+          } if (!/^\d{10}$/.test(mobile)) {
+            document.getElementById("mobileError").innerText = "pleas enter 10 digit number"
+            return false
+          } else {
+            document.getElementById("mobileError").innerText = ""
+          } if (!/^[a-zA-Z]+(?: [a-zA-Z]+)*$/.test(city)) {
+
+            document.getElementById("cityError").innerText = "pleas enter City "
+            return false
+          } else {
+            document.getElementById('cityError').innerText = ""
+
+          } if (!/^\d{6}$/.test(pinCode)) {
+            document.getElementById("pincodeError").innerText = "Please enter a valid 6-digit PIN code.";
+            return false;
+          } else {
+            document.getElementById('pincodeError').innerText = "";
+          } if (!/^[a-zA-Z0-9\s]+$/.test(landmark)) {
+            document.getElementById("landmarkError").innerText = "Please enter a valid landmark.";
+            return false;
+          } else {
+            document.getElementById('landmarkError').innerText = "";
+          } if (!/^[a-zA-Z\s]+$/.test(state)) {
+
+            document.getElementById("stateError").innerText = "pleas enter state "
+            return false
+          } else {
+            document.getElementById('stateError').innerText = ""
+
+          } if (!/^[a-zA-Z0-9\s.,\-\/]+$/.test(address)) {
+            document.getElementById("addressError").innerText = "Please enter a valid address.";
+            return false;
+          } else {
+            document.getElementById('addressError').innerText = "";
+          }
+          return true
         }
-        if(!/^[a-zA-Z]+(?: [a-zA-Z]+)*$/.test(name))  {
-          
-            document.getElementById("nameError").innerText="pleas enter name "
-            return false
-        }else{
-          document.getElementById('nameError').innerText=""
-
-        }if(!/^[a-zA-Z_.-]+@[a-zA-Z-]+\.[a-zA-Z]{2,4}$/.test(email)){
-        document.getElementById("emailError").innerText="pleas enter valid email"
-        return false
-        }else{
-          document.getElementById('emailError').innerText=""
-        }if(!/^\d{10}$/.test(mobile)){
-        document.getElementById("mobileError").innerText="pleas enter 10 digit number"
-        return false
-      }else{
-        document.getElementById("mobileError").innerText=""
-      }if(!/^[a-zA-Z]+(?: [a-zA-Z]+)*$/.test(city)) {
-          
-          document.getElementById("cityError").innerText="pleas enter City "
-          return false
-      }else{
-        document.getElementById('cityError').innerText=""
-
-      } if (!/^\d{6}$/.test(pinCode)) {
-    document.getElementById("pincodeError").innerText = "Please enter a valid 6-digit PIN code.";
-    return false;
-  } else {
-    document.getElementById('pincodeError').innerText = "";
-  } if (!/^[a-zA-Z0-9\s]+$/.test(landmark)) {
-    document.getElementById("landmarkError").innerText = "Please enter a valid landmark.";
-    return false;
-  } else {
-    document.getElementById('landmarkError').innerText = "";
-  }if(!/^[a-zA-Z\s]+$/.test(state)) {
-          
-    document.getElementById("stateError").innerText="pleas enter state "
-          return false
- }else{
-        document.getElementById('stateError').innerText=""
-
- }if (!/^[a-zA-Z0-9\s.,\-\/]+$/.test(address)) {
-    document.getElementById("addressError").innerText = "Please enter a valid address.";
-    return false;
-  } else {
-    document.getElementById('addressError').innerText = "";
-  }
-             return true
-}
       }
-    
+
     </script>
 
-<script>
-const  myform=document.getElementById('checkform') 
-console.log("vannie");
+    <script>
+      const myform = document.getElementById('checkform')
+      console.log("vannie");
 
-myform.addEventListener('submit',function(event){
-  event.preventDefault();
-  console.log("vanuuuu");
+      myform.addEventListener('submit', function (event) {
+        event.preventDefault();
+        console.log("vanuuuu");
 
-  if(validateForm()){
-    
-      
-       const formdata=$(this).serialize();
-       console.log("koiiii");
-
-   $.ajax({
-    type:'POST',
-    url:"/checkoutform",
-    data:formdata,
-    success:function(response){
-      if(response.success){
-        location.href ='/success'
-      }else if (response.success==false){
-        console.log("response success false");
-        razorpaypayment(response.order)
-      }
-    }
-   })
-
-    
-  }
-})
+        if (validateForm()) {
 
 
-function razorpaypayment(order) {
-  console.log("hekoooo");
-  console.log(order);
-  let options = {
-    
-                "key": "rzp_test_1o9zZLF7WbXBd7",
-                "amount": order.amount,
-                "currency": "INR",
-                "name": "Aranoz",
-                "description": "Test Transaction",
-                "image": "",
-                "order_id": order.id,
-                "handler": function (response) {
-                    verifyPayment(response, order)
-                },
-                "prefill": {
-                    "name": "Gaurav Kumar",
-                    "email": "gaurav.kumar@example.com",
-                    "contact": "9000090000"
-                },
-                "notes": {
-                    "address": "Razorpay Corporate Office"
-                },
-                "theme": {
-                    "color": "#3399cc"
-                }
-            };
-            let raz = new Razorpay(options);
-            raz.open();
-}
+          const formdata = $(this).serialize();
+          console.log("koiiii");
 
-function verifyPayment(payment,order){
-  console.log(payment,order,'hgghjhg');
-
-  $.ajax({
-                    url: "/verifypayment",
-                    method: 'post',
-                    data: {
-                        payment,
-                        order
-                    },
-                    success:(response)=>{
-                      if(response.success){
-                        console.log("helooo");
-                        location.href ='/success'
-                      }
-                    }
-
-                  })
-
-}
+          $.ajax({
+            type: 'POST',
+            url: "/checkoutform",
+            data: formdata,
+            success: function (response) {
+              if (response.success) {
+                location.href = '/success'
+              } else if (response.success == false) {
+                console.log("response success false");
+                razorpaypayment(response.order)
+              }
+            }
+          })
 
 
-</script>
-
-
-
-
-
-
-    <!-- <script>
-        
-      setTimeout(function() {
-        var errorMessage = document.getElementById('Error');
-        if (errorMessage) {
-          errorMessage.style.display = 'none';
         }
-      }, 5000); 
-    </script> -->
+      })
+
+
+      function razorpaypayment(order) {
+        console.log("hekoooo");
+        console.log(order);
+        let options = {
+
+          "key": "rzp_test_1o9zZLF7WbXBd7",
+          "amount": order.amount,
+          "currency": "INR",
+          "name": "Aranoz",
+          "description": "Test Transaction",
+          "image": "",
+          "order_id": order.id,
+          "handler": function (response) {
+            verifyPayment(response, order)
+          },
+          "prefill": {
+            "name": "Gaurav Kumar",
+            "email": "gaurav.kumar@example.com",
+            "contact": "9000090000"
+          },
+          "notes": {
+            "address": "Razorpay Corporate Office"
+          },
+          "theme": {
+            "color": "#3399cc"
+          }
+        };
+        let raz = new Razorpay(options);
+        raz.open();
+      }
+
+      function verifyPayment(payment, order) {
+        console.log(payment, order, 'hgghjhg');
+
+        $.ajax({
+          url: "/verifypayment",
+          method: 'post',
+          data: {
+            payment,
+            order
+          },
+          success: (response) => {
+            if (response.success) {
+              console.log("helooo");
+              location.href = '/success'
+            }
+          }
+
+        })
+
+      }
+
+
+    </script>
+    <script>
+      function applyCoupon(id) {
+        console.log('heloooo');
+        $.ajax({
+          url: "/applycoupon",
+          method: 'post',
+          data: {
+            id,
+          },
+          success: (response) => {
+            console.log(response);
+            if (response.coupon === false) {
+              Swal.fire({
+                title: "No Coupon Available",
+                icon: "error",
+                confirmButtonText: "OK",
+              });
+            } else if (response.coupon === 'alreadyApplied') {
+              Swal.fire({
+                title: "One coupon is already Active",
+                icon: "info",
+                confirmButtonText: "OK",
+              });
+            } else if (response.coupon === 'alreadyUsed') {
+              Swal.fire({
+                title: "You already used this coupon",
+                icon: "error",
+                confirmButtonText: "OK",
+              });
+            } else if (response.coupon === 'expired') {
+              Swal.fire({
+                title: "Oops",
+                text: "This coupon has expired",
+                icon: "info",
+                confirmButtonText: "OK",
+              });
+
+            } else if (response.coupon) {
+              Swal.fire({
+                title: "Success",
+                text: "Coupon added successfully!",
+                icon: "success",
+                confirmButtonText: "OK",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  $('#reloadDiv').load('/checkout #reloadDiv');
+                  $('#reloadAmount').load('/checkout #reloadAmount');
+                }
+              });
+            } else {
+              Swal.fire({
+                title: "Something Wrong",
+                icon: "error",
+                confirmButtonText: "OK",
+              });
+            }
+          }
+        });
+      }
+    </script>
+    <script>
+      function removeCoupon(id) {
+        console.log('heloooo');
+        $.ajax({
+          url: "/removecoupon",
+          method: 'post',
+          data: {
+            id,
+          },
+          success: (response) => {
+            if (response.success) {
+              Swal.fire({
+                title: "Coupon removed",
+                icon: "success",
+                confirmButtonText: "OK",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  $('#reloadDiv').load('/checkout #reloadDiv');
+                  $('#reloadAmount').load('/checkout #reloadAmount');
+                }
+              });
+            } else {
+              Swal.fire({
+                title: "Error removing coupon",
+                icon: "error",
+                confirmButtonText: "OK",
+              });
+            }
+          }
+        });
+      }
+
+
+
+
+
+
+
+
+
+
+    </script>

@@ -1,6 +1,39 @@
 
 
 <%- include('../layout/admin/header.ejs') %>
+<style>
+
+.card-body {
+    background-color: #f8f9fa; /* Background color */
+    border-radius: 15px; /* Rounded corners */
+    padding: 20px; /* Padding inside the card */
+}
+
+.card-body h4 {
+    margin-bottom: 10px; /* Bottom margin for the heading */
+}
+
+.card-body p {
+    margin: 0; /* Remove default margins for paragraphs */
+}
+.btn-danger {
+    background-color: #dc3545; /* Red background color */
+    color: #fff; /* White text color */
+    border: none; /* Remove border */
+    padding: 10px 20px; /* Add padding */
+    border-radius: 5px; /* Add border radius */
+}
+
+.btn-danger:hover {
+    background-color: #c82333; 
+}
+
+.btn-danger:active {
+    transform: translateY(1px); 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
+}
+
+</style>
 
 
 <body>
@@ -184,6 +217,7 @@
                                         <th scope="col">Quantity</th>
                                         <th scope="col">Category</th>
                                         <th scope="col">Price</th>
+                                        <th scope="col">offer</th>
                                         <th scope="col">Action</th>
                                         <th scope="col">edit</th>
                                         <th scope="col">update</th>
@@ -203,6 +237,33 @@
                                  <td><%=user.quantity%></td>
                                  <td><%=user.categoryId? user.categoryId.name:'deleted' %></td>
                                  <td><%=user.price%></td>
+                                 <td>
+                                    <%if(user.categoryId.offer){%>
+                                        <span>category offer</span><br>
+                                        <p class="badge rounded-pill alert-success">
+                                            <%= user.categoryId.offer.discountAmount %>%
+                                                offer
+                                        </p
+                                    
+                                    <%}else if(user.offer){%>
+                                        <p>product offer</p>
+                                        <button type="button" style="background-color: #a9dce3;"
+                                            onclick="removeOffer('<%= user._id %>')"
+                                            class="">
+                                            Remove
+                                        </button><br>
+                                        <p>₹<%= user.offer.discountAmount %>% offer
+                                        </p>
+
+
+                                    <%}else{%>
+                                    
+                                    
+                                    
+                                    <button  onclick="productId('<%=user._id%>')" data-bs-toggle="modal" data-bs-target="#addModal" style="height: 25px ; background-color:  #4681f4 ;" class="btn btn-info  ">offer</button>
+                                
+                                    <%}%>
+                                </td>
                                  <td>
                                     
                                         <%if(user.is_list){%>
@@ -237,7 +298,55 @@
                 <!-- card-body end// -->
             </div>
             <!-- card end// -->
-          
+            <div class="modal fade modal-xl" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered ">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="modal-title" id="exampleModalLabel">Offers</h3>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                  <div class="container-fluid">
+                      <div  id="reloadDiv"  class="row" >
+                        
+                        <% for(let i=0;i<offers.length;i++){%>
+                        <div class="col-md-5" style="padding: 20px; border: 1px solid #ccc; border-radius: 30px; margin-left: 20px;">
+                           <div class="card-body d-flex justify-content-center align-items-center">
+                          <div class="card-body " >
+                            <div  style="text-align: center;">
+                              <h4 style="margin-left: 28px;"><%=offers[i].name%></h4>
+                              <p  style="margin-left: 20px;">
+                               
+                               discountAmount: ₹<%=offers[i].discountAmount%>
+                              
+            
+                                
+                            </b>
+            
+            
+                              </p>
+                              <button  onclick="applyOffer('<%=offers[i]._id%>')"   style="margin-top: 20px;" class="btn btn-danger"  >Apply</button>
+                         
+            
+                           
+            
+                            </div>
+            
+                          </div>
+            
+            
+                        </div>
+                        </div>
+                        <%}%>
+                        
+                     
+                       </div>
+                   </div>
+                      
+                   </div>
+                  </div>
+                </div>
+              </div>
 
 
 
@@ -334,3 +443,72 @@
             });
     
             </script>
+        
+        <script>
+          
+        
+            function productId(id) {
+                console.log("Product ID:", id);
+                productId = id; // Assigning the id to the global variable
+            }
+        
+            function applyOffer(offerId) {
+                console.log("Offer ID:", offerId);
+                console.log("Product ID:", productId);
+        
+                fetch('/admin/applyOffer', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id: offerId,
+                        productId: productId // Using the productId captured globally
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        $('#addModal').modal('hide');
+                        location.reload();
+                    } else {
+                        Swal.fire('Error', 'Error adding offer.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+            }
+        </script>
+        
+
+
+
+
+
+
+            <script>
+               function removeOffer(id) {
+        console.log(id);
+        fetch(`/admin/removeoffer`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: id }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                Swal.fire('Error', 'Error adding offer.', 'error');
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
+            </script>
+            </body>

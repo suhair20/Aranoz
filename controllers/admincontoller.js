@@ -6,6 +6,8 @@ const orderModel = require('../models/orderModals')
 const puppeteer = require('puppeteer')
 const path = require('path')
 const ejs = require('ejs')
+const CouponModel=require('../models/CouponModel')
+const offerModel=require('../models/offerModel')
 
 
 
@@ -182,10 +184,24 @@ const blockUser = async (req, res) => {
 }
 const loadproduct = async (req, res) => {
     try {
-
+        const currentDate=new Date()
+        const offers=await offerModel.find({expiryDate:{$gte:currentDate},is_blocked:false})
         const category = await categoryModel.find({ is_list: false })
-        const product = await Product.find({}).populate("categoryId")
-        res.render('product', { category, product })
+        const product = await Product.find({}).populate("categoryId").populate('offer')
+
+        product.forEach(async(product)=>{
+            if(product.categoryId.offer){
+                const offerPrice = product.price * (1 - product.categoryId.offer.discountAmount / 100);
+                product.discountedPrice = parseInt(offerPrice);
+                product.offer=product.categoryId.offer
+               await  product.save()
+            }else if(product.offer){
+                const offerPrice = product.price * (1 - product.offer.discountAmount / 100);
+                product.discountedPrice = parseInt(offerPrice);
+                await product.save()
+            }
+        })
+        res.render('product', { category, product,offers })
 
     } catch (error) {
         console.log(error.message);
@@ -486,7 +502,48 @@ console.log(error.message);
 
 const loadCoupon=async(req,res)=>{
     try {
-       res.render('Coupon') 
+        const coupons=await CouponModel.find()
+       res.render('Coupon',{coupons}) 
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+const addcoupon=async(req,res)=>{
+    console.log("hiiiiiiiiii");
+    try {
+  const copuncode=await CouponModel.findOne({couponCode:req.body.Couponcode})
+
+  if(copuncode){
+    res.render("coupon",{message:'coupon code already esixt '})
+  }else{
+    const data=new CouponModel({
+        name:req.body.name,
+        couponCode:req.body.Couponcode,
+        discountAmount:req.body.discountAmount,
+        activationDate:req.body.activationdate,
+        expiryDate:req.body.Expiredate,
+        criteriaAmount:req.body.cramount
+
+    }) 
+    await data.save()
+    res.redirect('/admin/Coupon')
+  }
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const removeCoupon=async(req,res)=>{
+    try {
+        console.log("heyyyy");
+      const  couponId=req.params.id
+      console.log(couponId);
+        const coupon=await CouponModel.findOneAndDelete({_id:couponId})
+        if(coupon){
+        res.json({ok:true})
+        }
+        
     } catch (error) {
         console.log(error.message);
     }
@@ -512,7 +569,9 @@ module.exports = {
     salesreports,
     loadlogout,
     downloadpdf,
-    loadCoupon
+    loadCoupon,
+     addcoupon,
+     removeCoupon
 
 
 }

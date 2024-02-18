@@ -7,7 +7,7 @@ const admincontroller=require("../controllers/admincontoller")
 const productcontroller=require("../controllers/productcontroller")
 const multer= require("../middleware/multer")
 const auth = require('../middleware/auth')
-
+const offerController=require('../controllers/offerController')
 
 
 adminRoute.use(express.json());
@@ -47,6 +47,14 @@ adminRoute.get('/salesreport',auth.isAdminLogin,admincontroller.salesreports)
 adminRoute.get('/DownloadPdf',auth.isAdminLogin,admincontroller.downloadpdf)
 adminRoute.get('/logout',admincontroller.loadlogout)
 adminRoute.get('/Coupon',admincontroller.loadCoupon)
+adminRoute.post('/Addcoupon',admincontroller.addcoupon)
+adminRoute.delete('/removeCoupon/:id',admincontroller.removeCoupon)
+adminRoute.get('/offer',offerController.loadoffer)
+adminRoute.post('/AddOffer',offerController.postoffer)
+adminRoute.delete('/removeOffer/:id',offerController.removeOffer)
+adminRoute.patch('/applyOffer',offerController.applyOffer)
+adminRoute.patch('/removeoffer',offerController.removeProductOffer)
+
 
 
 

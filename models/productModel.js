@@ -21,9 +21,10 @@ const productSchema=new  mongoose.Schema({
         required:true
     },
     offer:{
-        type:String,
-        required:false
+        type:ObjectId,
+        ref:"offerModel",
     },
+    discountPrice:Number,
     description:{
         type:String,
         required:false

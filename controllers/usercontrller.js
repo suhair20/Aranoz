@@ -6,6 +6,7 @@ const cartModel=require('../models/cartModal')
 const Product=require('../models/productModel')
 const orderModel=require('../models/orderModals')
 const wihslistModel=require('../models/whishlistModel')
+const couponsModel= require('../models/CouponModel')
 
 //MONGO DB USER OTP VERIFIATION MODEL/////
 const userOTPVerification= require("./../models/userOTPVerification");
@@ -315,12 +316,22 @@ const checkout=async(req,res)=>{
       const Wallet= await User.findById(req.session.userId)
         const userid=req.session.userId
         const address=await Address.findOne({user:userid})
-    
-        const cartdata=await cartModel.findOne({user:userid}).populate('product.productId')
+      const  currentDate=new Date()
+       
+        const coupons=await couponsModel.find({expiryDate:{$gte:currentDate},is_blocked:false})
+        console.log("verummppppoo");
+        
+        const cartdata=await cartModel.findOne({user:userid}).populate('product.productId').populate('couponDiscount')
+        
+
+       console.log("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+
         console.log(cartdata);
          if(cartdata){
              const subtotal=cartdata.product.reduce((acc,val)=>acc+(val.price)*val.quantity,0)
-             res.render('user/checkout',{address,subtotal,Wallet})
+             const couponDiscount = cartdata.couponDiscount ? cartdata.couponDiscount.discountAmount : 0;
+             const discountAmount = subtotal - couponDiscount;
+             res.render('user/checkout',{address,subtotal,Wallet,coupons,discountAmount,cartdata})
          }
        
     } catch (error) {

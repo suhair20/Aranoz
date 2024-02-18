@@ -50,13 +50,13 @@
                     </a>
                     </li>
 
-                    <li class="menu-item active ">
+                    <li class="menu-item  ">
                         <a class="menu-link" href="/admin/Coupon">
                             <i class="icon material-icons md-store"></i>
                             <span class="text">Coupon</span>
                         </a>
                         </li>
-                        <li class="menu-item  ">
+                        <li class="menu-item active ">
                             <a class="menu-link" href="/admin/offer">
                                 <i class="icon material-icons md-store"></i>
                                 <span class="text">Offer</span>
@@ -137,7 +137,7 @@
         <section class="content-main">
             <div class="content-header">
                 <div>
-                    <h2 class="content-title card-title">Coupon</h2>
+                    <h2 class="content-title card-title">Offer</h2>
                     
                 </div>
           
@@ -155,9 +155,7 @@
                                     <tr>
                                         <th scope="col">NO</th>
                                         <th scope="col">name</th>
-                                        <th scope="col">Coupon Code</th>
                                         <th scope="col">Discount</th>
-                                        <th scope="col">Criteria Amount</th>
                                         <th scope="col">Activation Date</th>
                                         <th scope="col">Expiary Date</th>
                                         <th scope="col">Action</th>
@@ -167,27 +165,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                 <%coupons.reverse().forEach((coupon,index) => {%>
-                                  
-                                 
-                                 <tr>
-                                 <td><%=index+1%></td>
-                                 <td><%=coupon.name%> </td>
-                                 <td><%=coupon.couponCode%></td>
-                                 <td><%=coupon.discountAmount%></td>
-                                 <td><%=coupon.criteriaAmount%></td>
-                                 <td><%=coupon.activationDate?.toLocaleDateString('en-US', {
-                                  weekday: 'short' , year: 'numeric' , month: 'short' ,
-                                  day: 'numeric'||'n/a' })%></td>
-                                 <td><%=coupon.expiryDate?.toLocaleDateString('en-US', {
-                                  weekday: 'short' , year: 'numeric' , month: 'short' ,
-                                  day: 'numeric'||'n/a' })%></td>
-                                 <td><button   data-user-id="<%=coupon._id%>"   class="deleteButton"  >Delete</button></td>
                                  
                                  
+                            <%offer.reverse().forEach((offer,index)=>{%>
+                             <tr>
+                              <td><%=index+1%></td>  
+                              <td><%=offer.name%></td> 
+                              <td><%=offer.discountAmount%></td>
+                              <td><%=offer.activationdate?.toLocaleDateString('en-US', {
+                                weekday: 'short' , year: 'numeric' , month: 'short' ,
+                                day: 'numeric'||'n/a' })%></td>
+                                 <td><%=offer.expiryDate?.toLocaleDateString('en-US', {
+                                    weekday: 'short' , year: 'numeric' , month: 'short' ,
+                                    day: 'numeric'||'n/a' })%></td>
+                                   <td><button   data-user-id="<%=offer._id%>"   class="deleteButton"  >Delete</button></td>
                                 
                               </tr>
-                         <%   }); %>
+                          <%  }) %>
+                         
                                 </tbody>
                             </table>
                             </div>
@@ -200,31 +195,27 @@
                 </div>
                 <!-- card-body end// -->
             </div>
-            <a  <button type="button"  data-bs-toggle="modal" data-bs-target="#addModal" class="btn btn-primary"   >add Coupon</button></a>
+            <a  <button type="button"  data-bs-toggle="modal" data-bs-target="#addModal" class="btn btn-primary"   >add Offer</button></a>
             <!-- card end// -->
             <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h3 class="modal-title" id="exampleModalLabel">Add Coupon</h3>
+                      <h3 class="modal-title" id="exampleModalLabel">Add Offer</h3>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         
                       <p id="Error" style="color: red"></p>
-                      <form action="/admin/Addcoupon"   method="post" onsubmit="return  validateForm()"  >
+                      <form action="/admin/AddOffer"   method="post" onsubmit="return  validateForm()"  >
                           <div class="row">
                           <div class="col-md-6">
                         <div class="mb-3">
-                          <label for="recipient-name" class="col-form-label">Coupon name:</label>
+                          <label for="recipient-name" class="col-form-label">Offer name:</label>
                           <input type="text" name="name" class="form-control" id="idname">
                           <p id="nameError" style="color: red"></p>
                         </div>
-                        <div class="mb-3">
-                          <label for="recipient-name" class="col-form-label">Coupon code:</label>
-                          <input type="text" name="Couponcode" class="form-control"  id="idcode">
-                          <p id="addressError" style="color: red"></p>
-                        </div>
+                     
                         <div class="mb-3">
                             <p id="landmarkError" class="error-message" style="color: red"></p>
                           <label for="recipient-name" class="col-form-label">Discount Amount:</label>
@@ -241,12 +232,7 @@
                           <label for="recipient-name" class="col-form-label">Expire Date:</label>
                           <input type="text" name="Expiredate" class="form-control" id="idExpire">
                         </div>
-                        <div class="mb-3">
-                            <p id="pincodeError" class="error-message" style="color: red"></p>
-                          <label for="recipient-name" class="col-form-label">Criteria Amount:</label>
-                          <input type="text" name="cramount" class="form-control" id="idcriteria">
-                          
-                        </div>
+                     
                        
                         
                       </div>
@@ -329,7 +315,7 @@ document.querySelectorAll('.deleteButton').forEach(button => {
         
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`/admin/removeCoupon/${productId}`, {
+                const response = await fetch(`/admin/removeOffer/${productId}`, {
                     method: 'DELETE',
                 });
                 if (response.ok) {

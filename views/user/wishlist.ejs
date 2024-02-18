@@ -32,6 +32,7 @@
                  
               </thead>
               <tbody>
+                <%console.log(data,"dtaasssss");%>
               
                 <% if (  data && data.product && data.product.length > 0) { %>
 
@@ -41,7 +42,9 @@
                   <td>
                     <div class="media">
                       <div style="width: 22%;" class="d-flex">
-                        <img src="/sharpimages/<%= product.productId.images.image1%>" alt="" />
+                        <% if (product.productId && product.productId.images) { %>
+                          <img src="/sharpimages/<%= product.productId.images.image1%>" alt="" />
+                      <% } %>
                       </div>
                       <div class="media-body">
                         <p style="font-size: 167%;font-family: emoji;"><%=product.productId.name%></p>
