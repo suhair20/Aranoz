@@ -40,7 +40,7 @@ function validateForm(){
     var name=document.getElementById('name').value
     var Description=document.getElementById('Description').value
     if (!/^[a-zA-Z]+$/.test(name) || name.trim() === ""){
-        document.getElementById("nameError").innerText="plaes enter valid number (letter only)"
+        document.getElementById("nameError").innerText="plaes enter valid name (letter only)"
         return false
     }else{
         document.getElementById("nameError").innerText=""
@@ -51,7 +51,22 @@ function validateForm(){
         }else{
             document.getElementById("DescriptionError").innerText=""
         }
-        return true
+            if (hasMixedCase(name)) {
+        document.getElementById("nameError").innerText = "Category name cannot contain both uppercase and lowercase versions of the same letter";
+        return false;
+    }
+
+    return true;
+}
+
+
+function hasMixedCase(categoryName) {
+    var lowerCaseName = categoryName.toLowerCase();
+    var upperCaseName = categoryName.toUpperCase();
+
+    // Compare the lowercase and uppercase versions of the category name
+    // If they are not equal, it means the category name contains both uppercase and lowercase versions of the same letter
+    return lowerCaseName !== categoryName && upperCaseName !== categoryName;
 }
 
 </script>

@@ -210,8 +210,9 @@ const loadproduct = async (req, res) => {
 }
 const loadcategory = async (req, res) => {
     try {
-        const category = await categoryModel.find({})
-        res.render('category', { category })
+        const category = await categoryModel.find({}).populate('offer')
+        const offer= await offerModel.find({})
+        res.render('category', { category ,offer})
     } catch (error) {
         console.log(error.message);
     }
@@ -403,6 +404,11 @@ const salesreports = async (req, res) => {
 
             res.render('salesreport', { yearlyorder, data })
 
+        }else if(data=="Total"){
+
+            let yearlyorder= await orderModel.find({})
+            res.render('salesreport',{yearlyorder,data})
+
         }
 
 
@@ -415,6 +421,8 @@ const salesreports = async (req, res) => {
 
 const downloadpdf = async (req, res) => {
     try {
+        const startDate = req.query.startDate;
+        const endDate = req.query.endDate;
         const data = req.query.id
         let yearlyorder;
 
@@ -446,7 +454,7 @@ const downloadpdf = async (req, res) => {
 
 
 
-        } else {
+        } else if(data=="Weekly") {
             const currentDate = new Date();
             const startOfWeek = new Date(currentDate);
             startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
@@ -462,6 +470,16 @@ const downloadpdf = async (req, res) => {
             });
 
     //   console.log(yearlyorder,"year ");
+
+        }else{
+            yearlyorder = await orderModel.find({
+                orderDate: {
+                    $gte: new Date(startDate),
+                    $lte: new Date(endDate)
+                }
+            });
+
+         console.log(yearlyorder,"year");
 
         }
 

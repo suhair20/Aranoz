@@ -18,6 +18,7 @@ const categorySchema= new mongoose.Schema({
     is_list:{
         type:Boolean,
         default:false
+        
     }
 
 })

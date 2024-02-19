@@ -156,7 +156,13 @@
                               <a href="/singleproduct?id=<%=user._id%>">  <img src="/sharpimages/<%=user.images.image1%>" alt=""> </a>
                                 <div id="reloadWishlist_<%= user._id %>" class="single_product_text">
                                     <h4><%=user.name%></h4>
-                                    <h3 style="color: red;">₹<%=user.price%></h3>
+                                    <div class="price">
+                                        <%if(!user.discountedPrice){%>
+                                            <span style="color: red;" class="sale-price">₹<%=user.price%></span>
+                                        <%}else{%>
+                                            <span class="old-price">₹<%=user.price%></span>&nbsp;&nbsp;<span class="sale-price">₹<%=user.discountedPrice%></span>
+                                        <%}%>
+                                    </div>
                                     <a  class="add_cart">+ add to cart</a>
                                        <a onclick="addTowhishlist('<%=user._id%>')"> <i class="ti-heart" ></i></a>
                                 </div>

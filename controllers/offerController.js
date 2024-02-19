@@ -62,6 +62,9 @@ const applyOffer=async(req,res)=>{
   }
 }
 
+
+
+
 const removeProductOffer=async(req,res)=>{
 try {
     const id = req.body.id
@@ -71,17 +74,52 @@ try {
         { $unset: { offer: 1, discountPrice: 1 } },
         { new: true }
     );
-    await categoryModel.updateMany({ _id: product.categoryId }, { $unset: { offer: 1, } })
+    await categoryModel.updateMany({ _id: Product.categoryId }, { $unset: { offer: 1, } })
     res.json({ success: true })
     
 } catch (error) {
     console.log(error.message);
 }
 }
+
+
+
+
+
+const applyCategoryoffer=async(req,res)=>{
+    try {
+const{id,cayegoryId}=req.body
+
+const category=await categoryModel.find
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const removeCategoryoffer=async(req,res)=>{
+    try {
+        const id = req.body.id
+    
+        const product = await categoryModel.findOneAndUpdate(
+            { _id: id },
+            { $unset: { offer: 1 } },
+            { new: true }
+        );
+        await Product.updateMany({ categoryId: product._id }, { $unset: { offer: 1, discountedPrice: 1 } });
+
+        res.json({ success: true })
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 module.exports={
     loadoffer,
     postoffer,
     removeOffer,
     applyOffer,
-    removeProductOffer
+    removeProductOffer,
+    applyCategoryoffer,
+    removeCategoryoffer
 }

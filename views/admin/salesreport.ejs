@@ -36,12 +36,35 @@
                         <div class="col col-check flex-grow-0">
                            
                         </div>
+                        <% if(data!="Total"){%>
                         <div class="col-md-4 col-12 me-auto mb-md-0 mb-3">
                             <h2 class="content-title card-title"><%=data%> Sales Report</h2>
                         </div>
+                    <%}%>
+                        <% if(data=="Total"){%>
+                        <div class="container text-center mt-5">
+            
+                            <div class="col-6 mx-auto">
+                                <div class="form-group">
+                                    <label for="startDate">Start Date</label>
+                                    <input type="date" class="form-control" id="startDate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="endDate">End Date</label>
+                                    <input type="date" class="form-control" id="endDate">
+                                </div><br>
+                                <button class="btn btn-primary" onclick="filterOrders()">Filter</button>
+                            </div>
+                        </div>
+                    <%}%>
                        
                         <div class="col-md-2 col-6">
-                          <a href="/admin/DownloadPdf?id=<%=data%>"> <button  class="btn btn-info ">Download</button></a> 
+                            <%if(data!="Total"){%>
+                          <a href="/admin/DownloadPdf?id=<%=data%>"> <button id="downloadButton" class="btn btn-info ">Download</button></a> 
+                          <%}else{%>
+                            <a id="downloadLink" <button id="downloadButton" class="btn btn-info" onclick="addDateParamsToDownloadLink()" >Download</button></a>
+
+                            <%}%>
                         </div>
                     </div>
                 </header>
@@ -68,7 +91,7 @@
                                     <% yearlyorder.forEach((order,index) => {%>
                                         
                                    
-                                 <tr>
+                                 <tr class="order-row" data-order-date="<%= order.orderDate %>">
                                  <td><%=index+1%></td>
                                  
                                  <td><%=order._id%></td>
@@ -107,3 +130,50 @@
 
 
         </section>
+        <!-- <script>
+            window.addEventListener('beforeunload', function() {
+                document.getElementById('downloadButton').style.display = 'none';
+                document.getElementById('startDate').style.display = 'none';
+                document.getElementById('endDate').style.display = 'none';
+            });
+        </script> -->
+
+        <script>
+         function filterOrders() {
+            console.log("filtererrer");
+         const   startdate= document.getElementById('startDate').value
+         const  endDate=document.getElementById('endDate').value
+
+         const startdateTime=new Date(startdate).getTime()
+         const endDateTime=new Date(endDate).getTime();
+
+         const orderRows=document.querySelectorAll('.order-row')
+
+
+         orderRows.forEach((row)=>{
+              const orderDate=new Date(row.getAttribute('data-order-date')).getTime()
+              
+              if (!isNaN(orderDate)) {
+        if (orderDate >= startdateTime && orderDate <= endDateTime) {
+            row.style.display = 'table-row';
+        } else {
+            row.style.display = 'none';
+        }
+    } else {
+        console.error("Invalid order date:", orderDateValue);
+    }
+
+         })
+            
+         }
+
+        </script>
+        <script>
+            function addDateParamsToDownloadLink() {
+                console.log("vanne vanne");
+                var startDate = document.getElementById("startDate").value;
+                var endDate = document.getElementById("endDate").value;
+                var downloadLink = document.getElementById("downloadLink");
+                downloadLink.href = "/admin/DownloadPdf?startDate=" + startDate + "&endDate=" + endDate;
+            }
+        </script>

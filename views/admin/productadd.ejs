@@ -53,16 +53,18 @@ transform: translateY(-50%);">
         <div class="col-lg-3 col-md-6 rounded-image-preview">
             <div class="image-preview" id="imagePreview1"></div>
             <input name="image1" type="file" accept="image/*" id="imageInput1" class="imageInput" 
-            onchange="previewImage(this, 'imagePreview1')">
-            <label for="imageInput1" class="image-label">   
-                
-            </label>
+            onchange="previewImage(this, 'imagePreview1','cancelButton1')">
+            <button class="cancel-button" id="cancelButton1"   style="display: none; background-color: red;
+            border: none;"  onclick="cancelImageSelection('imageInput1', 'imagePreview1')">Cancel</button>
+            <label for="imageInput1" class="image-label"></label>
           
         </div>
         <div class="col-lg-3 col-md-6 rounded-image-preview">
             <div class="image-preview" id="imagePreview2"></div>
             <input name="image2" type="file" accept="image/*" id="imageInput2" class="imageInput" 
-            onchange="previewImage(this, 'imagePreview2')">
+            onchange="previewImage(this, 'imagePreview2','cancelButton2')">
+            <button class="cancel-button" id="cancelButton2"   style="display: none; background-color: red;
+            border: none;"  onclick="cancelImageSelection('imageInput2', 'imagePreview2')">Cancel</button>  
             <label for="imageInput2" class="image-label">  
                
             </label>
@@ -71,7 +73,9 @@ transform: translateY(-50%);">
         <div class="col-lg-3 col-md-6 rounded-image-preview">
             <div class="image-preview" id="imagePreview3"></div>
             <input name="image3" type="file" accept="image/*" id="imageInput3" class="imageInput" 
-            onchange="previewImage(this, 'imagePreview3')" >
+            onchange="previewImage(this, 'imagePreview3','cancelButton3')" >
+            <button class="cancel-button" id="cancelButton3"   style="display: none; background-color: red;
+            border: none;"  onclick="cancelImageSelection('imageInput3', 'imagePreview3')">Cancel</button>
             <label for="imageInput2" class="image-label">   
                
             </label>
@@ -82,7 +86,9 @@ transform: translateY(-50%);">
             
             <div class="image-preview" id="imagePreview4"></div>
             <input name="image4" type="file" accept="image/*" id="imageInput4" class="imageInput"
-            onchange="previewImage(this, 'imagePreview4')" >
+            onchange="previewImage(this, 'imagePreview4','cancelButton4')" >
+            <button class="cancel-button" id="cancelButton4"   style="display: none; background-color: red;
+            border: none;"  onclick="cancelImageSelection('imageInput4', 'imagePreview4')">Cancel</button>
             <label for="imageInput2" class="image-label">    
                 
             </label>
@@ -123,26 +129,43 @@ transform: translateY(-50%);">
         
         </script>
           <script>
-            function previewImage(input, previewId) {
-                const preview = document.getElementById(previewId);
-                const file = input.files[0];
+           function previewImage(input, previewId, cancelButtonId) {
+    const preview = document.getElementById(previewId);
+    const cancelButton = document.getElementById(cancelButtonId);
+
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            const image = new Image();
+            image.src = e.target.result;
+            image.width = 130;
+
+            preview.innerHTML = '';
+            preview.appendChild(image);
+            cancelButton.style.display = 'inline-block'; 
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.innerHTML = '';
+        cancelButton.style.display = 'none'; 
+    }
+}
+</script>
+<script>
+
+function cancelImageSelection(inputId, previewId) {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    const cancelButtonId = 'cancelButton' + inputId.charAt(inputId.length-1); 
+    const cancelButton = document.getElementById(cancelButtonId);
+
     
-                if (file) {
-                    const reader = new FileReader();
+    input.value = '';
+
     
-                    reader.onload = function (e) {
-                        const image = new Image();
-                        image.src = e.target.result;
-                        image.width = 130;
-    
-                        preview.innerHTML = '';
-                        preview.appendChild(image);
-                    };
-    
-                    reader.readAsDataURL(file);
-                } else {
-                    preview.innerHTML = '';
-                }
-            }
-    
-        </script>
+    preview.innerHTML = '';
+    cancelButton.style.display = 'none'; // 
+}
+</script>

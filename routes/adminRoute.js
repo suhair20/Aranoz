@@ -54,6 +54,8 @@ adminRoute.post('/AddOffer',offerController.postoffer)
 adminRoute.delete('/removeOffer/:id',offerController.removeOffer)
 adminRoute.patch('/applyOffer',offerController.applyOffer)
 adminRoute.patch('/removeoffer',offerController.removeProductOffer)
+adminRoute.patch('applyCategoryOffer',offerController.applyCategoryoffer)
+adminRoute.patch('removeCategoryoffer',offerController.removeCategoryoffer)
 
 
 

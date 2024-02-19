@@ -41,10 +41,22 @@
                     </a>
                     <li class="menu-item ">
                         <a class="menu-link" href="/admin/order">
-                            <i class="icon material-icons md-store"></i>
-                            <span class="text">Order</span>
+                            <i class="material-icons md-notifications animation-shake"></i>
+                            <span class="text" style="    margin-left: 11px;">Order</span>
                         </a>
                         </li>
+                        <li class="menu-item ">
+                            <a class="menu-link" href="/admin/Coupon">
+                                <i class="icon material-icons md-local_offer"></i>
+                                <span class="text">Coupon</span>
+                            </a>
+                            </li>
+                            <li class="menu-item ">
+                                <a class="menu-link" href="/admin/offer">
+                                    <i class="icon material-icons md-monetization_on"></i>
+                                    <span class="text">Offer</span>
+                                </a>
+                                </li>
                     
                
                
@@ -156,6 +168,7 @@
                                     <th scope="col">#ID</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Description</th>
+                                    <th scope="col">Offer</th>
                                     <th scope="col">Edit</th>
                                     <th scope="col">Action</th>
                                     <th scope="col">delete</th>
@@ -169,6 +182,29 @@
                                         <td><%=index+1 %></td>
                                         <td><%=user.name %></td>
                                         <td><%=user.description%></td> 
+                                        <td>
+                                           <%if(user.offer){%>
+                                            
+                                            <button type="button" style="background-color: #a9dce3;"
+                                                onclick="removeCategoryOffer('<%= user._id %>')"
+                                                class="">
+                                                Remove
+                                            </button><br>
+                                            <p>₹<%= user.offer.discountAmount %>% offer
+                                            </p>
+    
+    
+                                        <%}else{%>
+                                        
+                                        
+                                        
+                                        <button data-bs-toggle="modal" onclick="CategoryId('<%=user._id%>')"  data-bs-target="#addCModal" style="height: 25px ; background-color:  #4681f4 ;" class="btn btn-info  ">offer</button>
+                                    
+                                        <%}%>
+                                          
+
+                                        </td>
+                                        <
                                         <td><a href="/admin/editcategory?id=<%=user._id%>"> <button     class="btn btn-md rounded font-sm block-button">Edit </button></a></td>
                                         <td >
                                              <%if(user.is_list){%>
@@ -178,7 +214,7 @@
                                             <%}%>
                                         </td> 
                                         <td >
-                                       <button type="button"  data-user-id="<%=user._id%>" id="deleteButton"  class="btn btn-danger">delete</button>
+                                       <button type="button"  data-user-id="<%=user._id%>"   class="btn btn-danger">delete</button>
                                         </td>
                                         
                                     </tr>
@@ -194,6 +230,55 @@
            
             <div class="d-grid">
                 <a href="/admin/createcategory">  <button  class="btn btn-primary">Create category</button></a>
+              </div>
+              <div class="modal fade modal-xl" id="addCModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered ">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="modal-title" id="exampleModalLabel">Offers</h3>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                  <div class="container-fluid">
+                      <div  id="reloadDiv"  class="row" >
+                        
+                        <% for(let i=0;i<offer.length;i++){%>
+                        <div class="col-md-5" style="padding: 20px; border: 1px solid #ccc; border-radius: 30px; margin-left: 20px;">
+                           <div class="card-body d-flex justify-content-center align-items-center">
+                          <div class="card-body " >
+                            <div  style="text-align: center;">
+                              <h4 style="margin-left: 28px;"><%=offer[i].name%></h4>
+                              <p  style="margin-left: 20px;">
+                               
+                               discountAmount: ₹<%=offer[i].discountAmount%>
+                              
+            
+                                
+                            </b>
+            
+            
+                              </p>
+                              <button  onclick="applyCtaegoryOffer('<%=offer[i]._id%>')"   style="margin-top: 20px;" class="btn btn-danger"  >Apply</button>
+                         
+            
+                           
+            
+                            </div>
+            
+                          </div>
+            
+            
+                        </div>
+                        </div>
+                        <%}%>
+                        
+                     
+                       </div>
+                   </div>
+                      
+                   </div>
+                  </div>
+                </div>
               </div>
         </section>
         <script>
@@ -233,9 +318,11 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         
         <script>
-        document.getElementById('deleteButton').addEventListener('click', async function() {
-               var UserDataElement=document.getElementById('deleteButton');
-                var productId= UserDataElement.getAttribute('data-user-id');
+      document.querySelectorAll('.btn-danger').forEach(button => {
+    // Add event listener to each delete button
+    button.addEventListener('click', async function() {
+        // Get the productId from the clicked button's data attribute
+        const productId = this.getAttribute('data-user-id');
                   
                 const result = await Swal.fire({
                 title: "Are you sure?",
@@ -275,7 +362,77 @@
                 }
               }
             });
+        });
             </script>
+            
+            <script>
+          
+        
+                function CategoryId(id) {
+                    console.log("Product ID:", id);
+                    cateoryId = id; 
+                }
+            
+                function applyCtaegoryOffer(offerId) {
+                    console.log("Offer ID:", offerId);
+                    console.log("Product ID:", cateoryId);
+            
+                    fetch('/admin/applyCategoryOffer', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            id: offerId,
+                            cateoryId: cateoryId // Using the productId captured globally
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            $('#addModal').modal('hide');
+                            location.reload();
+                        } else {
+                            Swal.fire('Error', 'Error adding offer.', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                }
+            </script>
+            
+    
+    
+    
+    
+    
+    
+                <script>
+                   function removeCategoryOffer(id) {
+            console.log(id);
+            fetch(`/admin/removeCategoryoffer`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: id }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    Swal.fire('Error', 'Error adding offer.', 'error');
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        }
+    
+                </script>
+                </body>
       
        
       
