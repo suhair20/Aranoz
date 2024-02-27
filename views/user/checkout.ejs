@@ -27,11 +27,11 @@
   </section>
 
 
-  <button type="button" class="tp_btn " data-bs-toggle="modal" data-bs-target="#addModal"
+  <button type="button" class="btn_3" data-bs-toggle="modal" data-bs-target="#addModal"
     style=" margin-left: 122px; margin-top: 36px;">Apply Coupon</button></a></a>
 
 
-  <div class="modal fade modal-xl" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade " id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered ">
       <div class="modal-content">
         <div class="modal-header">
@@ -102,7 +102,80 @@
 
 
   <h2 style=" color: #030E4F;   margin-top: 45px;
-  margin-left: 500px;">Billing Details</h2>
+  margin-left: 600px;">Billing Details</h2>
+  <!-- ///addd address///// -->
+  	<button type="button"class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addaddressModal" style="width: 12%;height: 40px;margin-left: 13%;margin-top: 5%;"  >add+</button></a></a>
+    <div class="modal fade" id="addaddressModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="exampleModalLabel">Add Address</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+              <p id="Error" style="color: red"></p>
+          <form method="post" onsubmit="return  validateaddressForm()" action="/checkoutAddress">
+            <div class="row">
+            <div class="col-md-6">
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Name:</label>
+            <input type="text" name="name" class="form-control" id="idname">
+            <p id="nameError" style="color: red"></p>
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Address:</label>
+            <input type="text" name="address" class="form-control"  id="idaddress">
+            <p id="addressError" style="color: red"></p>
+          </div>
+          <div class="mb-3">
+            <p id="landmarkError" class="error-message" style="color: red"></p>
+            <label for="recipient-name" class="col-form-label">Landmark:</label>
+            <input type="text" name="landmark" class="form-control" id="idlandmark" >
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">State:</label>
+            <input type="text" name="state" class="form-control" id="idstate">
+          </div>
+            </div>
+            <div class="col-md-6">
+          <div class="mb-3">
+            <p id="cityError" class="error-message" style="color: red"></p>
+            <label for="recipient-name" class="col-form-label">City:</label>
+            <input type="text" name="city" class="form-control" id="idcity">
+          </div>
+          <div class="mb-3">
+            <p id="pincodeError" class="error-message" style="color: red"></p>
+            <label for="recipient-name" class="col-form-label">Pincode:</label>
+            <input type="text" name="pincode" class="form-control" id="idpincode">
+            
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">phone:</label>
+            <input type="text" name="phone" class="form-control" id="idmobile">
+            <p id="mobileError" class="error-message" style="color: red"></p>
+          </div>
+          <div class="mb-3">
+            <p id="emailError" class="error-message" style="color: red"></p>
+            <label for="recipient-name" class="col-form-label">Email:</label>
+            <input type="text" name="email" class="form-control" id="idemail">
+          </div>
+          </div>
+          <div class="col-md-12">
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-warning">Add</button>
+          </div>
+        </div>
+           </div>
+          </form>
+         </div>
+        </div>
+      </div>
+      </div>
+
+    <!-- ///////add addres/// -->
+
 
   <!-- breadcrumb start-->
 
@@ -574,3 +647,76 @@
 
 
     </script>
+    <script>
+    
+		function validateaddressForm(){
+		  console.log("yyyyyy");
+		  
+			
+		  
+		  
+		  console.log("hetttt");
+		  var name=document.getElementById('idname').value
+		  var email=document.getElementById('idemail').value
+		  var mobile=document.getElementById('idmobile').value
+		  var city=document.getElementById('idcity').value
+		  var landmark=document.getElementById('idlandmark').value
+		  var pinCode=document.getElementById('idpincode').value
+		  var state=document.getElementById('idstate').value
+		  var address=document.getElementById('idaddress').value
+		  if(name==""||email==""||mobile==""||city==""||landmark==""||pinCode==""||state==""||address==""){
+			  document.getElementById("Error").innerText="Empty input field . pleas fill "
+			  return false
+		  }
+		  if(!/^[a-zA-Z\s]+$/.test(name)) {
+			
+			  document.getElementById("nameError").innerText="pleas enter name "
+			  return false
+		  }else{
+			document.getElementById('nameError').innerText=""
+  
+		  }if(!/^[a-zA-Z_.-]+@[a-zA-Z-]+\.[a-zA-Z]{2,4}$/.test(email)){
+		  document.getElementById("emailError").innerText="pleas enter valid email"
+		  return false
+		  }else{
+			document.getElementById('emailError').innerText=""
+		  }if(!/^\d{10}$/.test(mobile)){
+		  document.getElementById("mobileError").innerText="pleas enter 10 digit number"
+		  return false
+		}else{
+		  document.getElementById("mobileError").innerText=""
+		}if(!/^[a-zA-Z\s]+$/.test(city)) {
+			
+			document.getElementById("cityError").innerText="pleas enter City "
+			return false
+		}else{
+		  document.getElementById('cityError').innerText=""
+  
+		} if (!/^\d{6}$/.test(pinCode)) {
+	  document.getElementById("pincodeError").innerText = "Please enter a valid 6-digit PIN code.";
+	  return false;
+	} else {
+	  document.getElementById('pincodeError').innerText = "";
+	} if (!/^[a-zA-Z0-9\s]+$/.test(landmark)) {
+	  document.getElementById("landmarkError").innerText = "Please enter a valid landmark.";
+	  return false;
+	} else {
+	  document.getElementById('landmarkError').innerText = "";
+	}if(!/^[a-zA-Z\s]+$/.test(state)) {
+			
+	  document.getElementById("statekError").innerText="pleas enter state "
+			return false
+   }else{
+		  document.getElementById('stateError').innerText=""
+  
+   }if (!/^[a-zA-Z0-9\s.,\-\/]+$/.test(address)) {
+	  document.getElementById("addressError").innerText = "Please enter a valid address.";
+	  return false;
+	} else {
+	  document.getElementById('addressError').innerText = "";
+	}
+			   return true
+  }
+		
+	  
+	  </script>

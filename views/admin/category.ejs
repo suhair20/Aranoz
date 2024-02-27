@@ -1,7 +1,62 @@
 
 <%- include('../layout/admin/header.ejs') %>
+<!-- Bootstrap CSS -->
+
+
+<!-- Bootstrap JavaScript -->
+
+
 
 <body>
+     <div class="modal fade modal-xl" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered ">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title" id="exampleModalLabel">Offers</h3>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+              <div class="container-fluid">
+                  <div  id="reloadDiv"  class="row" >
+                    
+                    <% for(let i=0;i<offer.length;i++){%>
+                    <div class="col-md-5" style="padding: 20px; border: 1px solid #ccc; border-radius: 30px; margin-left: 20px;">
+                       <div class="card-body d-flex justify-content-center align-items-center">
+                      <div class="card-body " >
+                        <div  style="text-align: center;">
+                          <h4 style="margin-left: 28px;"><%=offer[i].name%></h4>
+                          <p  style="margin-left: 20px;">
+                           
+                           discountAmount: ₹<%=offer[i].discountAmount%>
+                          
+        
+                            
+                        </b>
+        
+        
+                          </p>
+                          <button  onclick="applyCtaegoryOffer('<%=offer[i]._id%>')"   style="margin-top: 20px; background-color: red;" class="btn btn-light "  >Apply</button>
+                     
+        
+                       
+        
+                        </div>
+        
+                      </div>
+        
+        
+                    </div>
+                    </div>
+                    <%}%>
+                    
+                 
+                   </div>
+               </div>
+                  
+               </div>
+              </div>
+            </div>
+          </div>
     <div class="screen-overlay"></div>
     <aside class="navbar-aside" id="offcanvas_aside">
         <div class="aside-top">
@@ -198,7 +253,7 @@
                                         
                                         
                                         
-                                        <button data-bs-toggle="modal" onclick="CategoryId('<%=user._id%>')"  data-bs-target="#addCModal" style="height: 25px ; background-color:  #4681f4 ;" class="btn btn-info  ">offer</button>
+                                        <button onclick="CategoryId('<%=user._id%>')"  data-bs-toggle="modal"   data-bs-target="#addModal"   style="height: 25px ; background-color:  #4681f4 ;"   class="btn btn-info  ">offer</button>
                                     
                                         <%}%>
                                           
@@ -231,56 +286,9 @@
             <div class="d-grid">
                 <a href="/admin/createcategory">  <button  class="btn btn-primary">Create category</button></a>
               </div>
-              <div class="modal fade modal-xl" id="addCModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered ">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h3 class="modal-title" id="exampleModalLabel">Offers</h3>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                  <div class="container-fluid">
-                      <div  id="reloadDiv"  class="row" >
-                        
-                        <% for(let i=0;i<offer.length;i++){%>
-                        <div class="col-md-5" style="padding: 20px; border: 1px solid #ccc; border-radius: 30px; margin-left: 20px;">
-                           <div class="card-body d-flex justify-content-center align-items-center">
-                          <div class="card-body " >
-                            <div  style="text-align: center;">
-                              <h4 style="margin-left: 28px;"><%=offer[i].name%></h4>
-                              <p  style="margin-left: 20px;">
-                               
-                               discountAmount: ₹<%=offer[i].discountAmount%>
-                              
-            
-                                
-                            </b>
-            
-            
-                              </p>
-                              <button  onclick="applyCtaegoryOffer('<%=offer[i]._id%>')"   style="margin-top: 20px;" class="btn btn-danger"  >Apply</button>
-                         
-            
-                           
-            
-                            </div>
-            
-                          </div>
-            
-            
-                        </div>
-                        </div>
-                        <%}%>
-                        
-                     
-                       </div>
-                   </div>
-                      
-                   </div>
-                  </div>
-                </div>
-              </div>
+              
         </section>
+       
         <script>
        document.querySelectorAll('.Unblock-user,.block-user').forEach(function(element){
          element.addEventListener('click',function(event){
@@ -313,15 +321,16 @@
 
        })
 
+       
 
         </script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         
         <script>
       document.querySelectorAll('.btn-danger').forEach(button => {
-    // Add event listener to each delete button
+    
     button.addEventListener('click', async function() {
-        // Get the productId from the clicked button's data attribute
+  
         const productId = this.getAttribute('data-user-id');
                   
                 const result = await Swal.fire({
@@ -369,6 +378,7 @@
           
         
                 function CategoryId(id) {
+                    console.log("giii");
                     console.log("Product ID:", id);
                     cateoryId = id; 
                 }
@@ -376,6 +386,7 @@
                 function applyCtaegoryOffer(offerId) {
                     console.log("Offer ID:", offerId);
                     console.log("Product ID:", cateoryId);
+                    console.log("helloo");
             
                     fetch('/admin/applyCategoryOffer', {
                         method: 'PATCH',
@@ -384,7 +395,7 @@
                         },
                         body: JSON.stringify({
                             id: offerId,
-                            cateoryId: cateoryId // Using the productId captured globally
+                            categoryId: cateoryId 
                         }),
                     })
                     .then(response => response.json())

@@ -187,17 +187,18 @@ const loadproduct = async (req, res) => {
         const currentDate=new Date()
         const offers=await offerModel.find({expiryDate:{$gte:currentDate},is_blocked:false})
         const category = await categoryModel.find({ is_list: false })
-        const product = await Product.find({}).populate("categoryId").populate('offer')
+        const product = await Product.find({}).populate("categoryId.offer").populate('offer')
 
         product.forEach(async(product)=>{
             if(product.categoryId.offer){
                 const offerPrice = product.price * (1 - product.categoryId.offer.discountAmount / 100);
-                product.discountedPrice = parseInt(offerPrice);
+                product.discountPrice = parseInt(offerPrice);
                 product.offer=product.categoryId.offer
                await  product.save()
+               console.log(product);
             }else if(product.offer){
                 const offerPrice = product.price * (1 - product.offer.discountAmount / 100);
-                product.discountedPrice = parseInt(offerPrice);
+                product.discountPrice = parseInt(offerPrice);
                 await product.save()
             }
         })

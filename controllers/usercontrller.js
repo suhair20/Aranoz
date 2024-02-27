@@ -411,6 +411,32 @@ const changepassword=async(req,res)=>{
     }
  }
 
+ const checkoutAddress=async(req,res)=>{
+    try {
+        const user=req.session.userId
+        console.log("user:",user);
+        let{name,address,landmark,state,city,pincode,phone,email}=req.body
+
+        const newaddress={
+
+            name,
+            address,
+            landmark,
+            state,
+            city,
+            pincode,
+            phone,
+            email
+
+        }
+
+ const findAddress=await Address.findOneAndUpdate({user:user},{$push:{address:newaddress}},{upsert:true,new:true})
+  res.redirect('checkout')
+    } catch (error) {
+        console.log(error.message)
+    }
+ }
+
 
  
 module.exports ={
@@ -437,7 +463,8 @@ module.exports ={
     ordercancel,
     changepassword,
     loadWallet,
-    loadwishlist
+    loadwishlist,
+    checkoutAddress
     
     
 }

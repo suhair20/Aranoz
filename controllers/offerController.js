@@ -88,10 +88,13 @@ try {
 
 const applyCategoryoffer=async(req,res)=>{
     try {
-const{id,cayegoryId}=req.body
+        console.log("ategoryyyy");
+const{id,categoryId}=req.body
 
-const category=await categoryModel.find
-        
+
+const category=await categoryModel.findOneAndUpdate({_id:categoryId},{$set:{offer:id}},{new:true})
+console.log(category);
+        res.json({success:true})
     } catch (error) {
         console.log(error.message);
     }
@@ -99,14 +102,16 @@ const category=await categoryModel.find
 
 const removeCategoryoffer=async(req,res)=>{
     try {
+        console.log("heloooo");
         const id = req.body.id
     
-        const product = await categoryModel.findOneAndUpdate(
+        const Product = await categoryModel.findOneAndUpdate(
             { _id: id },
             { $unset: { offer: 1 } },
             { new: true }
         );
-        await Product.updateMany({ categoryId: product._id }, { $unset: { offer: 1, discountedPrice: 1 } });
+         await product.updateMany({ categoryId:id }, { $unset: { offer: 1, discountedPrice: 1 } });
+         
 
         res.json({ success: true })
         

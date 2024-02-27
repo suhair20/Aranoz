@@ -1,4 +1,19 @@
 <%- include('../layout/user/header.ejs') %>
+<style>
+    .price {
+    font-size: 16px; /* Adjust font size as needed */
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #888; /* Color for the strike-through */
+}
+
+.sale-price {
+    color: #c00; /* Color for the discounted price */
+}
+
+</style>
   
 
     <!--================Home Banner Area =================-->
@@ -157,12 +172,14 @@
                                 <div id="reloadWishlist_<%= user._id %>" class="single_product_text">
                                     <h4><%=user.name%></h4>
                                     <div class="price">
-                                        <%if(!user.discountedPrice){%>
-                                            <span style="color: red;" class="sale-price">₹<%=user.price%></span>
-                                        <%}else{%>
-                                            <span class="old-price">₹<%=user.price%></span>&nbsp;&nbsp;<span class="sale-price">₹<%=user.discountedPrice%></span>
-                                        <%}%>
+                                        <% if (user.discountPrice) { %>
+                                            <span class="old-price">₹<%= user.price %></span>&nbsp;&nbsp;
+                                            <span class="sale-price">₹<%= user.discountPrice %></span>
+                                        <% } else { %>
+                                            <span style="color: red;" class="sale-price">₹<%= user.price %></span>
+                                        <% } %>
                                     </div>
+                                    
                                     <a  class="add_cart">+ add to cart</a>
                                        <a onclick="addTowhishlist('<%=user._id%>')"> <i class="ti-heart" ></i></a>
                                 </div>
