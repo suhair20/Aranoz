@@ -37,9 +37,11 @@
       Pincode:<%=order.delivery_address.pincode%> <br>
       Phone:<%=order.delivery_address.phone%> <br>
       Email:<%=order.delivery_address.email%> <br>
+      <button   data-bs-toggle="modal" data-bs-target="#editModal"  style="    height: 25px; margin-top: 10px;" class="btn btn-dark ">edit</button>
+      
 
     </p>
-  
+
   </div>
 <div style="margin-left: 20%;" class="col-md-4">
   <h2>Order Summary</h2>
@@ -113,6 +115,72 @@ Payment method:<%=order.payment%>
     <% }) %>
   
 </div>
+
+
+<!-- ////edit modal////////////// -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">Edit Address</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post"   action="/editorderADDRUpdate">
+			<div class="row">
+			<div class="col-md-6">
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Name:</label>
+            <input type="text" value="<%=order.delivery_address.name%>" name="namee" class="form-control" id="recipient-name"> 
+			<input type="hidden" name="id" value="<%=order._id%>"  >   
+          </div>
+		  <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Address:</label>
+            <input type="text" value="<%=order.delivery_address.address%> " name="addresse" class="form-control" id="recipient-address">
+          </div>
+		  <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Landmark:</label>
+            <input type="text" value="<%=order.delivery_address.landmark%> " name="Landmarke" class="form-control" id="recipient-landmark">
+          </div>
+		  <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">State:</label>
+            <input type="text" value="<%=order.delivery_address.state%>" name="statee" class="form-control" id="recipient-state">
+			
+          </div>
+			</div>
+			<div class="col-md-6">
+		  <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">City:</label>
+            <input type="text" value="<%=order.delivery_address.city%> " name="citye" class="form-control" id="recipient-city">
+          </div>
+		  <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Pincode:</label>
+            <input type="text" value="<%=order.delivery_address.pincode%>" name="pincode" class="form-control" id="recipient-pincode">
+          </div>
+		  <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">phone:</label>
+            <input type="text" value="<%=order.delivery_address.phone%> " name="phonee" class="form-control" id="recipient-phone">
+          </div>
+		  <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Email:</label>
+            <input type="text" value="<%=order.delivery_address.email%>" name="emaile" class="form-control" id="recipient-email">
+          </div>
+		</div>
+		<div class="col-md-12">
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		  <button type="submit" class="btn btn-info">update</button>
+		</div>
+      </div>
+         </div>
+         
+        </form>
+     </div>
+    </div>
+  </div>
+</div>
+
+<!--  -->
 
       
     
@@ -203,4 +271,31 @@ Payment method:<%=order.payment%>
     })
   }
 </script>
+<!-- <script>
+  $(document).ready(function(){
+	$('#editModal').on('show.bs.modal',function(event){
+		console.log("hiii");
+		var button=$(event.relatedTarget);
+		var productId=button.data('id');
+    console.log(productId);
+		$('#recipient-id').val(productId)
+
+		$.ajax({
+			url:'/addresdetials/'+productId,
+			method:'GET',
+			success:function(data){
+				
+				$('#recipient-name').val(data.address.name)
+                $('#recipient-address').val(data.address.address)
+                $('#recipient-landmark').val(data.address.landmark)
+                $('#recipient-state').val(data.address.state)
+                $('#recipient-city').val(data.address.city)
+				$('#recipient-pincode').val(data.address.pincode)
+				$('#recipient-phone').val(data.address.phone)
+				$('#recipient-email').val(data.address.email)
+			}
+		})
+	})
+})
+</script> -->
    

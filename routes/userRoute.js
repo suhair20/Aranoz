@@ -72,6 +72,8 @@ userRoute.post('/verifypayment',ordercontroller.verifypayment)
 userRoute.post('/applycoupon',couponcontroller.applycoupon)
 userRoute.post('/removecoupon',couponcontroller.removecoupon)
 userRoute.post('/checkoutAddress',usercontroler.checkoutAddress)
+userRoute.post('/editorderADDRUpdate',usercontroler.editorderADDRUpdate)
+
 
 
 

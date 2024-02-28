@@ -7,6 +7,7 @@ const Product=require('../models/productModel')
 const orderModel=require('../models/orderModals')
 const wihslistModel=require('../models/whishlistModel')
 const couponsModel= require('../models/CouponModel')
+const order=require('../models/orderModals')
 
 //MONGO DB USER OTP VERIFIATION MODEL/////
 const userOTPVerification= require("./../models/userOTPVerification");
@@ -244,13 +245,17 @@ const addAddress=async(req,res)=>{
 
 const addresdeatials=async( req,res)=>{
     try {
+        console.log("monnnnn");
         const id=req.params.id
+        console.log(id);
        const  userId=req.session.userId;
          const user=await Address.findOne({user:userId}) 
+         console.log("kdfjjfk",user);
 
 
          user.address.forEach((address)=>{
             if(address._id==id){
+                console.log("varumooo");
                 res.json({address})
             }
          })
@@ -262,7 +267,7 @@ const addresdeatials=async( req,res)=>{
 
 const  editADDRUpdate=async(req,res)=>{
      try {
-        console.log("hiii");
+        
         const id=req.body.id
         console.log(id);
         const  userId=req.session.userId;
@@ -436,7 +441,42 @@ const changepassword=async(req,res)=>{
         console.log(error.message)
     }
  }
+   
+ const editorderADDRUpdate= async(req,res)=>{
+    try {
+        const id=req.body.id
+        console.log(id);
+        
+        const Order=await order.findById({_id:id})
+         
 
+        
+           Order.delivery_address.name=req.body.namee
+           Order.delivery_address.address=req.body.addresse
+           Order.delivery_address.landmark=req.body.Landmarke
+           Order.delivery_address.state=req.body.statee
+           Order.delivery_address.city=req.body.citye
+           Order.delivery_address.pincode=req.body.pincode
+           Order.delivery_address.mobile=req.body.phonee
+           Order.delivery_address.email=req.body.emaile
+
+
+           if (!Order.orderDate) {
+            Order.orderDate = new Date(); // Initialize with current date if null
+        }
+
+        
+        await Order.save();
+
+
+         res.redirect('ordercancel')
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+ }
+
+ 
 
  
 module.exports ={
@@ -464,7 +504,8 @@ module.exports ={
     changepassword,
     loadWallet,
     loadwishlist,
-    checkoutAddress
+    checkoutAddress,
+    editorderADDRUpdate
     
     
 }
