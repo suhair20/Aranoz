@@ -108,12 +108,13 @@ const razorpay= new Razorpay({
 
     } catch (error) {
        console.log(error.message); 
+       res.status(500).render('user/500');
     }
  }
 
 const verifypayment=async(req,res)=>{
    try {
-      console.log("hiiiiiiiiiiiiiiiiiiiiiii");
+      
       const id=req.session.userId
       const data=req.body
       const cartData=await cartModel.findOne({user:id})
@@ -145,7 +146,7 @@ const verifypayment=async(req,res)=>{
     
     await cartData.deleteOne({ user: id });
 
-console.log("vanniiiiiiiiiiiiii");
+
 
     res.json({success:true})
 
@@ -154,6 +155,7 @@ console.log("vanniiiiiiiiiiiiii");
 
    } catch (error) {
       console.log(error.message);
+      res.status(500).render('user/500');
    }
 }
 
@@ -164,6 +166,7 @@ console.log("vanniiiiiiiiiiiiii");
       res.render('user/success')
    } catch (error) {
       console.log(error.message);
+      res.status(500).render('user/500');
    }
  }
 
@@ -180,6 +183,7 @@ console.log("vanniiiiiiiiiiiiii");
        
    } catch (error) {
        console.log(error.message);
+       res.status(500).render('user/500');
    }
 }
 const retunproduct=async(req,res)=>{
@@ -213,6 +217,7 @@ const retunproduct=async(req,res)=>{
        
    } catch (error) {
        console.log(error.message);
+       res.status(500).render('user/500');
    }
 }
 

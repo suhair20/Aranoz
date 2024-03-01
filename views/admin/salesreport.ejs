@@ -57,15 +57,27 @@
                             </div>
                         </div>
                     <%}%>
+                             <%if(Sales=="excel"){%>
+                                <div class="col-md-2 col-6">
+                                    <%if(data!="Total"){%>
+                                  <a href="/admin/DownloadExcel?id=<%=data%>"> <button id="downloadButton" class="btn btn-info ">Download</button></a> 
+                                  <%}else{%>
+                                    <a id="downloadLink" <button id="downloadButton" class="btn btn-info" onclick="addDateParamsToDownloadEXLink()" >Download</button></a>
+        
+                                    <%}%>
+                                </div>
+                            
+                           <% }else{%>      
                        
                         <div class="col-md-2 col-6">
                             <%if(data!="Total"){%>
-                          <a href="/admin/DownloadPdf?id=<%=data%>"> <button id="downloadButton" class="btn btn-info ">Download</button></a> 
+                          <a href="/admin/DownloadPdf?id=<%=data%>&sales=null"> <button id="downloadButton" class="btn btn-info ">Download</button></a> 
                           <%}else{%>
                             <a id="downloadLink" <button id="downloadButton" class="btn btn-info" onclick="addDateParamsToDownloadLink()" >Download</button></a>
 
                             <%}%>
                         </div>
+                    <%} %>
                     </div>
                 </header>
                 <!-- card-header end// -->
@@ -113,7 +125,20 @@
                             </table>
                             </div>
                     </div>
-                    
+                    <div class="table-responsive" >
+                        <table  class="table table-bordered border-secondary ">
+                            <thead>
+                                <tr>
+                                    <th style="    font-size: 13px; font-weight: 1000;" scope="col">overall order amount:<%=revenue[0].revenue%></th>
+                                   <th   style="    font-size: 13px; font-weight: 1000;" scope="col">overall sales count:<%=totalorders%></th>
+                                   <th style="font-size: 13px; font-weight: 1000;" scope="col">overall discount Amount:</th>
+                                   
+                                    
+
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 
                 
                     
@@ -175,5 +200,14 @@
                 var endDate = document.getElementById("endDate").value;
                 var downloadLink = document.getElementById("downloadLink");
                 downloadLink.href = "/admin/DownloadPdf?startDate=" + startDate + "&endDate=" + endDate;
+            }
+        </script>
+        <script>
+            function addDateParamsToDownloadEXLink() {
+                console.log("vanne vanne");
+                var startDate = document.getElementById("startDate").value;
+                var endDate = document.getElementById("endDate").value;
+                var downloadLink = document.getElementById("downloadLink");
+                downloadLink.href = "/admin/DownloadExcel?startDate=" + startDate + "&endDate=" + endDate;
             }
         </script>

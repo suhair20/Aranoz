@@ -8,6 +8,7 @@ const path = require('path')
 const ejs = require('ejs')
 const CouponModel=require('../models/CouponModel')
 const offerModel=require('../models/offerModel')
+const ExcelJS = require('exceljs');
 
 
 
@@ -21,6 +22,7 @@ const loadlogin = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -44,6 +46,7 @@ const loadsign = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -130,7 +133,7 @@ const loadhome = async (req, res) => {
         const monthlyRevenueArray = allMonthsData.map(entry => entry.monthlyrevenue);
         const monthlyOrderArray = allMonthsData.map(entry => entry.monthlyOrder);
 
-        // Log the separate arrays
+        
         console.log("Monthly Revenue Array:", monthlyRevenueArray);
         console.log("Monthly Order Array:", monthlyOrderArray);
 
@@ -150,6 +153,7 @@ const loadhome = async (req, res) => {
         res.render('dashbord', { totalorders, totalproducts, revenue, monthlyrevenue, currentMonthName, monthlyRevenueArray, cashondelivery, Razorpay, Wallet, monthlyOrderArray })
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 const loadusers = async (req, res) => {
@@ -158,6 +162,7 @@ const loadusers = async (req, res) => {
         res.render('users', { users })
     } catch (error) {
         console.log(error.mesage);
+        res.status(500).render('user/500');
     }
 }
 const blockUser = async (req, res) => {
@@ -180,6 +185,7 @@ const blockUser = async (req, res) => {
         res.json({ block: true });
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 const loadproduct = async (req, res) => {
@@ -206,6 +212,7 @@ const loadproduct = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
 
     }
 }
@@ -216,37 +223,48 @@ const loadcategory = async (req, res) => {
         res.render('category', { category ,offer})
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 const loadcreatecategory = async (req, res) => {
     try {
-        res.render('createcategorie')
+     const existingcategory=await categoryModel.find()
+        res.render('createcategorie',{existingcategory})
+        console.log(existingcategory);
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
+        
     }
 }
 const loadcreating = async (req, res) => {
     try {
-
-        const name = req.body.name
-        const description = req.body.Description
-
-        const validate = await categoryModel.findOne({ name: name })
-        if (validate) {
-            res.render('createcategorie', { message: "you can't add same category" })
+        const name = req.body.name;
+        const description = req.body.Description;
+    
+        
+        const existingCategories = await categoryModel.find({}, 'name');
+    
+        
+        const duplicateName = existingCategories.some(category => category.name.toLowerCase() === name.toLowerCase());
+    
+        if (duplicateName) {
+           
+            return res.render('createcategorie', { message: "You can't add a category with the same name" });
         } else {
-            const newcategory = new categoryModel({
+           
+            const newCategory = new categoryModel({
                 name: name,
                 description: description
             });
-            await newcategory.save()
-
-            res.redirect('/admin/category')
-
+    
+            await newCategory.save();
+            return res.redirect('/admin/category');
         }
-
     } catch (error) {
+       
         console.log(error.message);
+        return res.status(500).render('user/500');
     }
 }
 const
@@ -259,6 +277,7 @@ const
             res.render('editcategory', { userdata })
         } catch (error) {
             console.log(error.message);
+            res.status(500).render('user/500');
         }
     }
 const updatingcategory = async (req, res) => {
@@ -276,6 +295,7 @@ const updatingcategory = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 const blockcategory = async (req, res) => {
@@ -292,6 +312,7 @@ const blockcategory = async (req, res) => {
         res.json({ block: true });
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -307,6 +328,7 @@ const deletcategory = async (req, res) => {
         res.json({ ok: true })
     } catch (error) {
         console.log(error.mesage);
+        res.status(500).render('user/500');
     }
 }
 
@@ -317,6 +339,7 @@ const order = async (req, res) => {
         res.render('order', { order })
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -328,6 +351,7 @@ const orderview = async (req, res) => {
         res.render('orderview', { detials })
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -345,6 +369,7 @@ const updatestatus = async (req, res) => {
         console.log("dooon");
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -353,6 +378,19 @@ const salesreports = async (req, res) => {
     try {
 
         const data = req.query.id
+        const Sales=req.query.sales 
+        console.log(Sales); 
+        const totalorders = await orderModel.countDocuments()
+        const revenue = await orderModel.aggregate([{
+            $group: {
+                _id: null,
+                revenue: { $sum: "$subtotal" }
+            }
+
+        }])
+
+        const discountAmount=await 
+        console.log(revenue);
 
         if (data == 'Yearly') {
             const currentDate = new Date();
@@ -366,7 +404,7 @@ const salesreports = async (req, res) => {
             })
             console.log('helooo2');
             console.log(yearlyorder)
-            res.render('salesreport', { yearlyorder, data })
+            res.render('salesreport', { yearlyorder, data,Sales,revenue ,totalorders})
             console.log('helooo1');
 
         } else if (data == 'Monthly') {
@@ -383,7 +421,7 @@ const salesreports = async (req, res) => {
             });
 
 
-            res.render('salesreport', { yearlyorder, data })
+            res.render('salesreport', { yearlyorder, data,Sales,revenue ,totalorders})
         } else if (data == 'Weekly') {
             const currentDate = new Date();
             const startOfWeek = new Date(currentDate);
@@ -403,12 +441,12 @@ const salesreports = async (req, res) => {
             });
             console.log("sdihfidh", yearlyorder);
 
-            res.render('salesreport', { yearlyorder, data })
+            res.render('salesreport', { yearlyorder, data,Sales,revenue,totalorders })
 
         }else if(data=="Total"){
 
             let yearlyorder= await orderModel.find({})
-            res.render('salesreport',{yearlyorder,data})
+            res.render('salesreport',{yearlyorder,data,Sales,revenue,totalorders})
 
         }
 
@@ -416,15 +454,28 @@ const salesreports = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
 
 const downloadpdf = async (req, res) => {
     try {
+        console.log("ndhaannnn");
         const startDate = req.query.startDate;
         const endDate = req.query.endDate;
         const data = req.query.id
+        const Sales=req.query.sales
+        const totalorders = await orderModel.countDocuments()
+        const revenue = await orderModel.aggregate([{
+            $group: {
+                _id: null,
+                revenue: { $sum: "$subtotal" }
+            }
+
+        }])
+
+
         let yearlyorder;
 
         if (data == 'Yearly') {
@@ -486,7 +537,7 @@ const downloadpdf = async (req, res) => {
 
 
         const ejspagepath = path.join(__dirname, '../views/admin/salesreport.ejs')
-        const ejsPage = await ejs.renderFile(ejspagepath, { data, yearlyorder })
+        const ejsPage = await ejs.renderFile(ejspagepath, { data, yearlyorder,Sales,revenue,totalorders })
         const browser = await puppeteer.launch({ headless: "new" });
         const page = await browser.newPage();
         await page.setContent(ejsPage);
@@ -501,6 +552,91 @@ const downloadpdf = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
+    }
+}
+const DownloadExcel = async (req, res) => {
+    try {
+
+        const startDate = req.query.startDate;
+        const endDate = req.query.endDate;
+        const data = req.query.id;
+        const totalorders = await orderModel.countDocuments()
+        const revenue = await orderModel.aggregate([{
+            $group: {
+                _id: null,
+                revenue: { $sum: "$subtotal" }
+            }
+
+        }])
+
+        let yearlyorder;
+
+        if (data == 'Yearly') {
+            const currentDate = new Date();
+            const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
+            const endOfYear = new Date(currentDate.getFullYear(), 11, 31);
+            yearlyorder = await orderModel.find({
+                orderDate: {
+                    $gte: startOfYear,
+                    $lte: endOfYear
+                }
+            });
+        } else if (data == 'Monthly') {
+            const currentDate = new Date();
+            const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            yearlyorder = await orderModel.find({
+                orderDate: {
+                    $gte: startOfMonth,
+                    $lte: endOfMonth
+                }
+            });
+        } else if (data == "Weekly") {
+            const currentDate = new Date();
+            const startOfWeek = new Date(currentDate);
+            startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+            const endOfWeek = new Date(currentDate);
+            endOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + 6);
+            yearlyorder = await orderModel.find({
+                orderDate: {
+                    $gte: startOfWeek,
+                    $lte: endOfWeek
+                }
+            });
+        } else {
+            yearlyorder = await orderModel.find({
+                orderDate: {
+                    $gte: new Date(startDate),
+                    $lte: new Date(endDate)
+                }
+            });
+        }
+
+        
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Sales Report');
+
+       
+        worksheet.addRow(['Order ID', 'Customer Name', 'Order Date', 'Subtotal', ' Payment', 'overall order amount ','overall sales count']);
+
+       
+        yearlyorder.forEach(order => {
+            worksheet.addRow([order._id, order.delivery_address?.name||'n/a', order.orderDate?.toLocaleDateString('en-US', {
+                weekday: 'short' , year: 'numeric' , month: 'short' ,
+                day: 'numeric'||'n/a' }), order.subtotal, order.payment],revenue[0].revenue,totalorders);
+        });
+
+       
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename=sales_report.xlsx');
+
+        
+        await workbook.xlsx.write(res);
+        res.end();
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 const loadlogout=async(req,res)=>{
@@ -516,6 +652,7 @@ const loadlogout=async(req,res)=>{
     })
 }catch(error){
 console.log(error.message);
+res.status(500).render('user/500');
 }
 }
 
@@ -525,15 +662,18 @@ const loadCoupon=async(req,res)=>{
        res.render('Coupon',{coupons}) 
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 const addcoupon=async(req,res)=>{
     console.log("hiiiiiiiiii");
+    const coupons=await CouponModel.find()
     try {
   const copuncode=await CouponModel.findOne({couponCode:req.body.Couponcode})
+  const name=await CouponModel.findOne({name:req.body.name})
 
-  if(copuncode){
-    res.render("coupon",{message:'coupon code already esixt '})
+  if(copuncode||name){
+    res.render("coupon",{message:'coupon already esixt ',coupons})
   }else{
     const data=new CouponModel({
         name:req.body.name,
@@ -550,6 +690,7 @@ const addcoupon=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -565,6 +706,7 @@ const removeCoupon=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -590,7 +732,8 @@ module.exports = {
     downloadpdf,
     loadCoupon,
      addcoupon,
-     removeCoupon
+     removeCoupon,
+     DownloadExcel
 
 
 }

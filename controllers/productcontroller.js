@@ -10,6 +10,7 @@ const addproduct = async (req, res) => {
 
    } catch (error) {
       console.log(error.message);
+      res.status(500).render('user/500');
    }
 }
 
@@ -32,12 +33,13 @@ const addproductpost = async (req, res) => {
 
       const proceedimages = await Promise.all(
          img.map(async (imagename) => {
+            if(imagename){
             await sharp(`public/multerimages/${imagename}`)
                .resize(500, 500)
                .toFile(`public/sharpimages/${imagename}`)
             console.log("what ");
             return imagename;
-
+            }
          })
 
 
@@ -52,11 +54,10 @@ const addproductpost = async (req, res) => {
             price: detials.Price,
             description: detials.description,
             images: {
-               image1: proceedimages[0],
-               image2: proceedimages[1],
-               image3: proceedimages[2],
-               image4: proceedimages[3]
-
+              image1: proceedimages[0] || null,
+         image2: proceedimages[1] || null,
+         image3: proceedimages[2] || null,
+         image4: proceedimages[3] || null,
             }
 
 
@@ -71,6 +72,7 @@ const addproductpost = async (req, res) => {
       }
    } catch (error) {
       console.log(error.message);
+    
 
    }
 }
@@ -89,6 +91,7 @@ const productdetials = async (req, res) => {
       });
    } catch (error) {
       console.error('Error fetching products detials ', error)
+      res.status(500).render('user/500');
    }
 }
 
@@ -108,6 +111,7 @@ const deletproduct = async (req, res) => {
       }
    } catch (error) {
       console.log(error.message);
+      res.status(500).render('user/500');
    }
 }
 const loadproductedit = async (req, res) => {
@@ -120,6 +124,7 @@ const loadproductedit = async (req, res) => {
 
    } catch (error) {
       console.log(error.message);
+      res.status(500).render('user/500');
    }
 }
 
@@ -173,6 +178,7 @@ const productedit = async (req, res) => {
 
    } catch (error) {
       console.log(error.message);
+      res.status(500).render('user/500');
    }
 }
 
@@ -190,6 +196,7 @@ const blockproduct = async (req, res) => {
       res.json({ block: true });
    } catch (error) {
       console.log(error.message);
+      res.status(500).render('user/500');
    }
 }
 

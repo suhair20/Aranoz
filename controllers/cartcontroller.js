@@ -25,6 +25,7 @@ const cartload=async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -61,6 +62,7 @@ const getcart=async(req,res)=>{
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -77,6 +79,7 @@ const removecart=async(req,res)=>{
       }
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -122,6 +125,7 @@ const updatecart=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -148,6 +152,7 @@ const getwhislist=async(req,res)=>{
        }
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -166,6 +171,7 @@ const removewishlist=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
+        res.status(500).render('user/500');
     }
 }
 

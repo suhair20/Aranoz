@@ -32,6 +32,10 @@ mongoose.connection.on('error',(err)=>{
     console.log('MongoDB connetion error',err);
 })
 
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 //server static file from the public  directory//
 app.use('/public',express.static(path.join(__dirname,'public')));
 app.use('/asset',express.static(path.join(__dirname,'public/asset')));
@@ -45,6 +49,10 @@ app.use('/',userRoute)
 //adminRoute//
 const adminRoute=require("./routes/adminRoute")
 app.use('/admin',adminRoute)
+
+app.use((req,res,next)=>{
+   res.status(400).render('400');
+})
 
 //strat server and listen port o  3001///
 app.listen(3002,()=>{

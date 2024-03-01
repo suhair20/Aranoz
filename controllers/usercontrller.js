@@ -63,6 +63,7 @@ const loadlogin=async(req,res)=>{
     
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -97,6 +98,7 @@ const loadsignup =async(req,res)=>{
         res.render('user/signup')
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
         
     }
 }
@@ -106,6 +108,7 @@ const verifyOTP=async(req,res)=>{
         res.render('user/otp')
     } catch (error) {
        console.log(error.message); 
+       res.status(500).render('user/500');
     }
 }
 
@@ -127,6 +130,7 @@ const loadprofile=async(req,res)=>{
         }
     } catch (error) {
        console.log(error.message); 
+       res.status(500).render('user/500');
     }
 }
 const loadlogout=async(req,res)=>{
@@ -142,6 +146,7 @@ const loadlogout=async(req,res)=>{
     })
 }catch(error){
 console.log(error.message);
+res.status(500).render('user/500');
 }
 }
 const singleproduct=async(req,res)=>{
@@ -156,6 +161,7 @@ const singleproduct=async(req,res)=>{
         res.render('user/singleproduct',{images})
          } catch (error) {
             console.log(error.message);
+            res.status(500).render('user/500');
          }
 }
 
@@ -171,6 +177,7 @@ const getprofileorder= async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -184,6 +191,7 @@ const getprofileaddress= async (req,res)=>{
         res.render('user/profileaddress',{detials})
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 const getprofilepassword=async(req,res)=>{
@@ -191,6 +199,7 @@ const getprofilepassword=async(req,res)=>{
         res.render('user/profilepassword')
     } catch (error) {
         console.log(error.message );
+        res.status(500).render('user/500');
     }
 }
 
@@ -200,6 +209,7 @@ const getprofilelogout=async(req,res)=>{
         res.render('user/profilelogout')
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 const updateuser=async(req,res)=>{
@@ -212,6 +222,7 @@ const updateuser=async(req,res)=>{
    res.redirect('/profile')
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 const addAddress=async(req,res)=>{
@@ -240,6 +251,7 @@ const addAddress=async(req,res)=>{
 
     } catch (error) {
         console.log(error.message );
+        res.status(500).render('user/500');
     }
 }
 
@@ -262,6 +274,7 @@ const addresdeatials=async( req,res)=>{
          
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -295,6 +308,7 @@ const  editADDRUpdate=async(req,res)=>{
 
      } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
      }
 }
 
@@ -313,6 +327,7 @@ const deletaddress=async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -329,7 +344,7 @@ const checkout=async(req,res)=>{
         const cartdata=await cartModel.findOne({user:userid}).populate('product.productId').populate('couponDiscount')
         
 
-       console.log("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+ 
 
         console.log(cartdata);
          if(cartdata){
@@ -341,6 +356,7 @@ const checkout=async(req,res)=>{
        
     } catch (error) {
         console.log(error.messge);
+        res.status(500).render('user/500');
     }
 }
 
@@ -362,16 +378,17 @@ const ordercancel=async(req,res)=>{
         res.render('user/ordercancel',{order,daysDifferenceRounded})
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
 const changepassword=async(req,res)=>{
     try {
        const { current , newPass } = req.body;
-       console.log(req.body,'ddddddddddd');
+       
        const id = req.session.userId
        const user = await User.findById(id)
-       console.log(user,'ffffffffffffffff');
+       
        if (!user) {
            return res.json({ success: false, message: 'User not found.' });
        }
@@ -389,6 +406,7 @@ const changepassword=async(req,res)=>{
        return res.json({ success: true, message: 'Password changed successfully.' });
     } catch (error) {
        console.log(error.message);
+       res.status(500).render('user/500');
     }
  }
  const loadWallet=async(req,res)=>{
@@ -400,6 +418,7 @@ const changepassword=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
  }
 
@@ -413,6 +432,7 @@ const changepassword=async(req,res)=>{
         res.render('user/wishlist',{data,userId})
     } catch (error) {
         console.log(error.mesage);
+        res.status(500).render('user/500');
     }
  }
 
@@ -439,6 +459,7 @@ const changepassword=async(req,res)=>{
   res.redirect('checkout')
     } catch (error) {
         console.log(error.message)
+        res.status(500).render('user/500');
     }
  }
    
@@ -473,6 +494,7 @@ const changepassword=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
  }
 

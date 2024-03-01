@@ -12,6 +12,7 @@ const loadoffer=async(req,res)=>{
     
    } catch (error) {
     console.log(error.message);
+    res.status(500).render('user/500');
    }
 }
 
@@ -34,6 +35,7 @@ const postoffer=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 const removeOffer=async(req,res)=>{
@@ -43,6 +45,7 @@ const removeOffer=async(req,res)=>{
        res.json({ok:true})     
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -59,6 +62,7 @@ const applyOffer=async(req,res)=>{
     
   } catch (error) {
     console.log(error.message);
+    res.status(500).render('user/500');
   }
 }
 
@@ -79,6 +83,7 @@ try {
     
 } catch (error) {
     console.log(error.message);
+    res.status(500).render('user/500');
 }
 }
 
@@ -97,6 +102,7 @@ console.log(category);
         res.json({success:true})
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -117,6 +123,7 @@ const removeCategoryoffer=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 module.exports={

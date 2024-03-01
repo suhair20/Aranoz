@@ -178,6 +178,7 @@ const  sendOTPVerificationEmail=(async({_id,email},res)=>{
 
     } catch (error) {
         console.log(error)
+        res.status(500).render('user/500');
     }
 })
 //nodemailer

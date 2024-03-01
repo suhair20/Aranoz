@@ -137,8 +137,17 @@
             <div class="content-header">
                 <div>
                     <h2 class="content-title card-title">Coupon</h2>
+                    <% 
+                    if(typeof message !=='undefined'){
+                      %>
+                      <h5 style="color: red;" id="errorMessage"><%-message %></h5>
+            
+                      <%
+                    }
+                    %>
                     
                 </div>
+               
           
             </div>
             <div class="card mb-4">
@@ -209,6 +218,7 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                   
                         
                       <p id="Error" style="color: red"></p>
                       <form action="/admin/Addcoupon"   method="post" onsubmit="return  validateForm()"  >
@@ -225,25 +235,29 @@
                           <p id="addressError" style="color: red"></p>
                         </div>
                         <div class="mb-3">
-                            <p id="landmarkError" class="error-message" style="color: red"></p>
+                           
                           <label for="recipient-name" class="col-form-label">Discount Amount:</label>
                           <input type="text" name="discountAmount" class="form-control" id="iddiscount" >
+                          <p id="landmarkError" class="error-message" style="color: red"></p>
                         </div>
                         <div class="mb-3">
                           <label for="recipient-name" class="col-form-label">Activation Date:</label>
-                          <input type="text" name="activationdate" class="form-control" id="idactivation">
+                          <input type="text" name="activationdate" class="form-control" id="idactivation" >
+                          <p id="acdate" class="error-message" style="color: red"></p>
                         </div>
                           </div>
                           <div class="col-md-6">
                         <div class="mb-3">
-                            <p id="cityError" class="error-message" style="color: red"></p>
+                            
                           <label for="recipient-name" class="col-form-label">Expire Date:</label>
                           <input type="text" name="Expiredate" class="form-control" id="idExpire">
+                          <p id="cityError" class="error-message" style="color: red"></p>
                         </div>
                         <div class="mb-3">
-                            <p id="pincodeError" class="error-message" style="color: red"></p>
+                            
                           <label for="recipient-name" class="col-form-label">Criteria Amount:</label>
                           <input type="text" name="cramount" class="form-control" id="idcriteria">
+                          <p id="pincodeError" class="error-message" style="color: red"></p>
                           
                         </div>
                        
@@ -285,22 +299,57 @@
               var Activationdate=document.getElementById('idactivation').value
               var Expiredate=document.getElementById('idExpire').value
               var CriteriaAmount=document.getElementById('idcriteria').value
+              var discount = parseFloat(discountAmount);
+              var selectedDate = new Date(Activationdate);
+              var expdate= new Date(Expiredate)
+              var currentDate = new Date();
             
               if(name==""||Couponcode==""||discountAmount==""||Activationdate==""||Expiredate==""||CriteriaAmount==""){
                 console.log("heloo");
-                  document.getElementById("Error").innerText="Empty input field . pleas fill "
+                  document.getElementById("Error").innerText="Empty input field pleas fill "
                   return false
               }
               if(!/^[a-zA-Z\s]+$/.test(name)) {
                 
                   document.getElementById("nameError").innerText="pleas enter name "
                   return false
-              }else{
-               
+              }else if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{4,}$/.test(Couponcode)){
+                console.log("hoiiiirrrRRR");
+                document.getElementById("addressError").innerText="must contain at least one capital letter, one lowercase letter, one number, and be at least 4 characters long"
+                return false
+              }else if (!discountAmount.trim()) {
+               document.getElementById("landmarkError").innerText = "Discount amount is required";
+               return false;
+              } else if  (isNaN(discountAmount)) {
+               document.getElementById("landmarkError").innerText = "Discount amount must be a number";
+                return false;
+              } else  if (!Number.isInteger(discount) || discount < 0 || discount > 100) {
+              document.getElementById("landmarkError").innerText = "Discount amount must be a positive integer between 0 and 100";
+              return false;
+             }else if(!Activationdate.trim()){
+                document.getElementById("acdate").innerText = "Empty input field";
+                return false
+             }else if(selectedDate < currentDate){
+                document.getElementById("acdate").innerText = "pleas eneter correct date";
+                return false
+             }else if(!Expiredate.trim() ){
+                document.getElementById("cityError").innerText = "Empty input field";
+                return false
+             }else if(expdate <= selectedDate){
+                document.getElementById("cityError").innerText = "pleas enter expire date";
+                return false
+             }else if (!CriteriaAmount.trim()) {
+               document.getElementById("pincodeError").innerText = " amount is required";
+               return false;
+              } else if  (isNaN(CriteriaAmount)) {
+               document.getElementById("pincodeError").innerText = "pleas enter right amount";
+                return false;
+              }  
+                return true
               }
 
-              return true
-            }
+         
+            
            
            
       
@@ -354,4 +403,13 @@ document.querySelectorAll('.deleteButton').forEach(button => {
     });
 });
 
+</script>
+<script>
+    
+    setTimeout(function() {
+        var errorMessage = document.getElementById('errorMessage');
+        if (errorMessage) {
+            errorMessage.style.display = 'none';
+        }
+    }, 5000);
 </script>

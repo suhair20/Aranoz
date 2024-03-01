@@ -13,21 +13,23 @@ const isLogin = (req, res, next) => {
     }
     catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
 const isLogout = (req, res, next) => {
     try {
         if (req.session.userId) {
-            // User is logged in, redirect to the home page or another appropriate route
+            
             console.log("middle:" + req.session.userId);
             res.redirect('/');
         } else {
-            // User is not logged in, continue to the next middleware or route handler
+          
             next();
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).render('user/500');
     }
 }
 
@@ -42,7 +44,7 @@ const isAdminLogin = async (req, res, next) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.status(500).render('500');
+        res.status(500).render('user/500');
     }
 }
 const isAdminLogout = async (req, res, next) => {
@@ -54,7 +56,7 @@ const isAdminLogout = async (req, res, next) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.status(500).render('500');
+        res.status(500).render('user/500');
     }
 }
 
