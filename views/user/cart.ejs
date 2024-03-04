@@ -58,14 +58,14 @@
                   </td>
                   <td>
                     <div id="">
-                      <button type="button" class="sub"onclick="updateQuantity('<%= product.productId._id %>', -1)"> -</button>
+                      <button type="button" class="sub"onclick="updateQuantity('<%= product.productId?._id %>', -1)"> -</button>
                       <input style="width: 20px;" type="text" value="<%= product.quantity %>" disabled required />
-                      <button type="button" class="add"onclick="updateQuantity('<%= product.productId._id %>', 1)">+</button>
+                      <button type="button" class="add"onclick="updateQuantity('<%= product.productId?._id %>', 1)">+</button>
                   </div>
                   </td>
                   <td>
                     <button class="remove" id="closeButton"
-                    onclick="removeProduct('<%= product.productId._id %>','<%=id%>')">
+                    onclick="removeProduct('<%= product.productId?._id %>','<%=id%>')">
                     <i class="fa fa-trash"></i>
                 </button>
                   </td>

@@ -8,6 +8,7 @@ const orderModel=require('../models/orderModals')
 const wihslistModel=require('../models/whishlistModel')
 const couponsModel= require('../models/CouponModel')
 const order=require('../models/orderModals')
+const Categoery=require('../models/categoryModel')
 
 //MONGO DB USER OTP VERIFIATION MODEL/////
 const userOTPVerification= require("./../models/userOTPVerification");
@@ -44,8 +45,31 @@ const contactloading=async(req,res)=>{
 
 const shoploading=async(req,res)=>{
     try {
-        const product=await Product.find({})
-        res.render('user/shop',{product})
+        const query=req.query.name
+        const search=req.query.search
+        console.log(search);
+        const categoery = await Categoery.find({})
+        let product
+
+        
+        if(!query&&!search){
+            console.log("queryyyyyyyy");
+         product=await Product.find({})
+      
+        }else if(query){
+            console.log("noqueryyy");
+             product=await Product.find({categoryId:query ,is_blocked:false})
+        }else if(search){
+            console.log("sochi");
+             product = await Product.find({ name: { $regex: search, $options: 'i' } });
+           console.log(product);
+           
+        }
+       if(product.length==0){
+        console.log("ivide thannee");
+        res.render('user/shop',{message:"there is no products",product,categoery})
+       }
+        res.render('user/shop',{product,categoery})
     } catch (error) {
         console.log(error.message);
     }

@@ -196,13 +196,16 @@ const loadproduct = async (req, res) => {
         const product = await Product.find({}).populate("categoryId.offer").populate('offer')
 
         product.forEach(async(product)=>{
+        console.log(product.categoryId.name);    
             if(product.categoryId.offer){
+                console.log("catgory ofeer is herer ");
                 const offerPrice = product.price * (1 - product.categoryId.offer.discountAmount / 100);
                 product.discountPrice = parseInt(offerPrice);
                 product.offer=product.categoryId.offer
                await  product.save()
                console.log(product);
             }else if(product.offer){
+                console.log("product offer herer");
                 const offerPrice = product.price * (1 - product.offer.discountAmount / 100);
                 product.discountPrice = parseInt(offerPrice);
                 await product.save()

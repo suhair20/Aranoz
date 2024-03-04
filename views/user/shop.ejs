@@ -12,7 +12,61 @@
 .sale-price {
     color: #c00; /* Color for the discounted price */
 }
+  .left_widgets {
+        margin-bottom: 20px;
+    }
 
+    .l_w_title h3 {
+        color: #333;
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .widgets_inner ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .widgets_inner ul li {
+        margin-bottom: 10px;
+    }
+
+    .widgets_inner ul li a {
+        color: #666;
+        text-decoration: none;
+        font-size: 16px;
+        transition: color 0.3s ease;
+    }
+
+    .widgets_inner ul li a:hover {
+        color: #000;
+    }
+    .btn_3 {
+    display: inline-block;
+    padding: 0px 24px;
+    border-radius: 50px;
+    background-color: #ff3368;
+    border: 1px solid #ecfdff;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 400;
+    box-shadow: -1.717px 8.835px 29.76px 2.24px rgba(255, 51, 104, 0.18);
+    border: 1px solid #ff3368;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+}
+.search-form {
+        display: flex; 
+        align-items: center; 
+    }
+
+    .search-input {
+        flex: 1; 
+        margin-right: 0px; 
+    }
 </style>
   
 
@@ -23,9 +77,9 @@
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="breadcrumb_iner">
-                        <div class="breadcrumb_iner_item">
-                            <h2>Shop Category</h2>
-                            <p>Home <span>-</span> Shop Category</p>
+                        <div style="    margin-bottom: 220px;" class="breadcrumb_iner_item">
+                            <h2  >Shop Category</h2>
+                            <p style="    " >Home <span>-</span> Shop Category</p>
                         </div>
                     </div>
                 </div>
@@ -35,6 +89,7 @@
     <!-- breadcrumb start-->
 
     <!--================Category Product Area =================-->
+    
     <section class="cat_product_area section_padding">
         <div class="container">
             <div class="row">
@@ -42,87 +97,22 @@
                     <div class="left_sidebar_area">
                         <aside class="left_widgets p_filter_widgets">
                             <div class="l_w_title">
-                                <h3>Browse Categories</h3>
+                               <a href="/shop"> <h3>Browse Categories</h3></a>
                             </div>
+                            <%categoery.forEach((data) => {%>
+                                
+                           
                             <div class="widgets_inner">
                                 <ul class="list">
                                     <li>
-                                        <a href="#">Frozen Fish</a>
-                                        <span>(250)</span>
+                                        <a  href="/shop?name=<%= encodeURIComponent(data._id) %>"><%=data.name%></a>
                                     </li>
-                                    <li>
-                                        <a href="#">Dried Fish</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fresh Fish</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Meat Alternatives</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fresh Fish</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Meat Alternatives</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Meat</a>
-                                        <span>(250)</span>
-                                    </li>
-                                </ul>
+                             
+                                    
                             </div>
+                        <%})%>
+                      <a style="margin-left: 70px;     " href="/shop">  <button style="margin-top: 10px;" class="btn_3" >Back</button></a>
                         </aside>
-
-                        <!-- <aside class="left_widgets p_filter_widgets">
-                            <div class="l_w_title">
-                                <h3>Product filters</h3>
-                            </div>
-                            <div class="widgets_inner">
-                                <ul class="list">
-                                    <li>
-                                        <a href="#">Apple</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Asus</a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="#">Gionee</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Micromax</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Samsung</a>
-                                    </li>
-                                </ul>
-                                <ul class="list">
-                                    <li>
-                                        <a href="#">Apple</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Asus</a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="#">Gionee</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Micromax</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Samsung</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </aside> -->
-
-                      
-
-                       
                     </div>
                 </div>
                 <div class="col-lg-9">
@@ -152,20 +142,21 @@
                                 </div>
                                 <div class="single_product_menu d-flex">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="search"
-                                            aria-describedby="inputGroupPrepend">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="inputGroupPrepend"><i
-                                                    class="ti-search"></i></span>
-                                        </div>
+                                    
+                                        <form class="search-form" action="/shop" method="GET">
+                                            <input class="search-input" name="search" type="text" placeholder="Search">
+                                            <button class="search-button" type="submit">
+                                                <i class="fa fa-search"></i>
+                                            </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row align-items-center latest_product_inner">
+                    <div  id="productContainer" class="row align-items-center latest_product_inner">
+                     <% if(product.length!=0){%> 
                     <% product.forEach((user,index)=>{%>
-                        
+                    
                         <div class="col-lg-4 col-sm-6">
                             <div class="single_product_item">
                               <a href="/singleproduct?id=<%=user._id%>">  <img src="/sharpimages/<%=user.images.image1%>" alt=""> </a>
@@ -187,6 +178,20 @@
                         </div>
                       
                     <%})%>
+                <%}else{%>
+
+                    <% 
+        if(typeof message !=='undefined'){
+          %>
+          <h5 style="    color: grey;
+    margin-left: 260px;
+    margin-top: 79px;" id="errorMessage"><%-message %></h5>
+
+          <%
+        }
+        %>
+
+                    <%} %>
                        
                       
                       
@@ -203,6 +208,7 @@
             </div>
         </div>
     </section>
+
     <!--================End Category Product Area =================-->
 
     <!-- product_list part start-->
@@ -261,3 +267,9 @@
 
 
     </script>
+    <script>
+ 
+
+
+    </script>
+  
