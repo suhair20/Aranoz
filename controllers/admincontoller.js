@@ -290,9 +290,10 @@ const updatingcategory = async (req, res) => {
         const category = await categoryModel.findOne({ name: name })
         console.log("heloo");
         if (category && category.name == name) {
-            console.log(heloo);
+            console.log("yiii");
             res.render('editcategory', { message: "already exist", userdata: category })
         } else {
+            console.log("hoii")
             await categoryModel.updateOne({ _id: req.body.id }, { $set: { name: name, description: description } })
             res.redirect('/admin/category')
         }

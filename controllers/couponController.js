@@ -5,6 +5,7 @@ const couponModel = require('../models/CouponModel')
 
 const applycoupon=async(req,res)=>{
     try {
+      console.log("iiii");
         const couponId = req.body.id;
         const user_id = req.session.userId;
         const currentDate = new Date();
