@@ -288,8 +288,9 @@ const updatingcategory = async (req, res) => {
         const name = req.body.name
         const description = req.body.Description
         const category = await categoryModel.findOne({ name: name })
-        console.log("iii");
+        console.log("heloo");
         if (category && category.name == name) {
+            console.log(heloo);
             res.render('editcategory', { message: "already exist", userdata: category })
         } else {
             await categoryModel.updateOne({ _id: req.body.id }, { $set: { name: name, description: description } })
