@@ -13,8 +13,10 @@ const addressModel = require('../models/AddressModal');
 const orderModel=require('../models/orderModals')
 
 const razorpay= new Razorpay({
-   key_id: process.env.KEY_Id,
-   key_secret: process.env.key_seceret,
+   key_id: 'lrzp_test_AuoFiF2uxjiri1',
+   
+   key_secret:'lwImEROmJdThKilx8INK3dZZ' ,
+   
 })
 
 

@@ -8,7 +8,7 @@ dotenv.config()
 
 
 //define mongo db connection url //
- const dbUrl='mongodb://127.0.0.1:27017/ecommerse';
+ const dbUrl='mongodb+srv://new-user:123456rz@cluster0.2eeai.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
  
  //connect mongodb with specifcied option//
  mongoose.connect(dbUrl,{

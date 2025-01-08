@@ -159,7 +159,8 @@
                             <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                             <div class="text">
                                 <h6 class="mb-1 card-title">Revenue</h6>
-                                <span>₹<%=revenue[0].revenue%></span>
+                                <span>₹<%= revenue && revenue.length > 0 && revenue[0].revenue ? revenue[0].revenue : 0 %></span>
+
                                 <span class="text-sm"> Shipping fees are not included </span>
                             </div>
                         </article>
@@ -171,7 +172,7 @@
                             <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
                             <div class="text">
                                 <h6 class="mb-1 card-title">Orders</h6>
-                                <span><%=totalorders%></span>
+                                <span><%=totalorders||0%></span>
                                 <span class="text-sm"> Excluding orders in transit </span>
                             </div>
                         </article>
@@ -183,7 +184,7 @@
                             <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
                             <div class="text">
                                 <h6 class="mb-1 card-title">Products</h6>
-                                <span><%=totalproducts%></span>
+                                <span><%=totalproducts||0%></span>
                                
                             </div>
                         </article>
@@ -195,7 +196,8 @@
                             <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
                             <div class="text">
                                 <h6 class="mb-1 card-title">Monthly Earning</h6>
-                                <span>₹<%=monthlyrevenue[0].monthlyrevenue%></span>
+                                <span>₹<%= monthlyrevenue[0]?.monthlyrevenue || 0 %></span>
+
                                 <span class="text-sm"> Based in your local time. </span>
                             </div>
                         </article>

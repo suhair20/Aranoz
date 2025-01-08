@@ -1,4 +1,140 @@
- <!--::footer_part start::-->
+ <style>
+
+
+/* General footer styling */
+.footer_part {
+    background-color: aliceblue; /* Background color */
+    padding: 40px 0; /* Padding for top and bottom */
+    font-family: Arial, sans-serif;
+}
+
+/* Row styles for one-line layout */
+.footer_part .row {
+    display: flex; /* Use flexbox for row layout */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: space-between; /* Evenly distribute columns */
+    gap: 20px; /* Space between columns */
+}
+
+.single_footer_part {
+    flex: 1; /* Make columns flexible */
+    min-width: 150px; /* Set a minimum width for each column */
+}
+
+/* Heading styles */
+.single_footer_part h4 {
+    font-size: 1.25rem; /* Heading font size */
+    margin-bottom: 15px; /* Space below heading */
+    color: #333; /* Heading color */
+}
+
+/* List styles */
+.single_footer_part ul {
+    padding: 0;
+    list-style: none;
+}
+
+.single_footer_part ul li {
+    margin-bottom: 10px; /* Space between list items */
+}
+
+.single_footer_part ul li a {
+    text-decoration: none;
+    color: #555; /* Link color */
+    transition: color 0.3s;
+}
+
+.single_footer_part ul li a:hover {
+    color: #007bff; /* Link hover color */
+}
+
+/* Newsletter input and button */
+.mail_part {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between input and button */
+}
+
+.mail_part input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.mail_part button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.mail_part button:hover {
+    background-color: #0056b3;
+}
+
+/* Copyright section */
+.copyright_part {
+    background-color: #e9ecef; /* Slightly darker background */
+    padding: 15px 0;
+    font-size: 0.9rem;
+}
+
+.copyright_text {
+    text-align: left;
+}
+
+.footer_icon ul {
+    display: flex;
+    gap: 15px; /* Space between social icons */
+    justify-content: flex-end;
+}
+
+.footer_icon ul li a {
+    color: #555;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+}
+
+.footer_icon ul li a:hover {
+    color: #007bff;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .footer_part .row {
+        flex-wrap: wrap; /* Wrap items on smaller screens */
+        justify-content: center; /* Center-align columns */
+        gap: 20px; /* Space between wrapped rows */
+    }
+
+    .single_footer_part {
+        flex: 1 1 calc(50% - 20px); /* Two columns per row */
+        text-align: center;
+    }
+
+    .copyright_text {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .footer_icon ul {
+        justify-content: center; /* Center-align social icons */
+    }
+}
+
+
+
+
+
+
+ </style>
+
+
+<!--::footer_part start::-->
  <footer class="footer_part">
     <div class="container">
         <div class="row justify-content-around">

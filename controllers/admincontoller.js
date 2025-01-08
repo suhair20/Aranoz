@@ -148,7 +148,10 @@ const loadhome = async (req, res) => {
         const Wallet = await orderModel.countDocuments({ payment: "'Wallet" })
 
 
-
+     console.log(totalorders);
+     console.log(monthlyrevenue);
+     
+     
 
         res.render('dashbord', { totalorders, totalproducts, revenue, monthlyrevenue, currentMonthName, monthlyRevenueArray, cashondelivery, Razorpay, Wallet, monthlyOrderArray })
     } catch (error) {
