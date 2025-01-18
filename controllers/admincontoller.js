@@ -129,7 +129,7 @@ const loadhome = async (req, res) => {
 
 
 
-        ///////////////////////////
+        
         const monthlyRevenueArray = allMonthsData.map(entry => entry.monthlyrevenue);
         const monthlyOrderArray = allMonthsData.map(entry => entry.monthlyOrder);
 
