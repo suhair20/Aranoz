@@ -140,7 +140,7 @@ const loadhome = async (req, res) => {
 
 
 
-
+    
 
         const cashondelivery = await orderModel.countDocuments({ payment: "cash-on-delivery" })
         const Razorpay = await orderModel.countDocuments({ payment: "Razorpay" })
